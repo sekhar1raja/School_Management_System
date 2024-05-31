@@ -1,18 +1,29 @@
 /* src/App.css */
 body {
-  font-family: Arial, sans-serif;
+  background-color: #add8e6; /* Light blue background */
+  height: 100vh;
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-header, footer {
-  background-color: #333;
-  color: #fff;
-  padding: 1rem;
-  text-align: center;
+.glass-box {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 70px;
+  width: 100%;
+  max-width: 800px; /* Increased max-width */
 }
 
-main {
-  padding: 2rem;
+.logo {
+  width: 150px;
+}
+
+h1 {
+  margin-bottom: 20px;
 }
