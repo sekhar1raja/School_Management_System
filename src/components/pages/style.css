@@ -1,0 +1,47 @@
+/* App.css */
+.App {
+    text-align: center;
+  }
+  
+  .App-header  h1{  
+   color:#aeaeae;
+    padding: 20px;
+    text-align: start;
+    font-size: 18px;
+  }
+  
+  main {
+    padding: 20px;
+  }
+  .container{
+    flex-wrap: wrap;
+  }
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 8px;
+    text-align: center;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .grid {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .card-body{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .more-cards {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  
