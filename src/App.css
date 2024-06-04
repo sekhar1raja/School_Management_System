@@ -1,11 +1,18 @@
 /* src/App.css */
 body {
-  background-color: #add8e6; /* Light blue background */
+  background-color: #f6f6f6; /* Light blue background */
   height: 100vh;
   margin: 0;
  
 }
-
+.App{
+  display: flex;
+}
+.main-content {
+  flex-grow: 1;
+ 
+  margin-top: 5rem;
+}
 .glass-box {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 15px;

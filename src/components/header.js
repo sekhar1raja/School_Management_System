@@ -10,12 +10,10 @@ import ListItem from '@mui/material/ListItem';
 import ListSubheader from '@mui/material/ListSubheader';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Home from './pages/home'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faChalkboardTeacher, faGraduationCap, faGrip, faUserGraduate, faChartLine, faBook, faClipboardUser, faTrophy } from '@fortawesome/free-solid-svg-icons';
 
@@ -214,23 +212,10 @@ export default function Dashboard() {
             </ListItem>
           </List>
         </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: 'auto',
-            overflow: 'auto',
-          }}
-        >
+        
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Home /> {/* Render the Home component */}
-          </Container>
-        </Box>
+         
+        
       </Box>
     </ThemeProvider>
   );

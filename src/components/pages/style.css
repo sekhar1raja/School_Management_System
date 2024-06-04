@@ -1,4 +1,7 @@
 /* App.css */
+body{
+  background-color: white;
+}
 .App {
     text-align: center;
   }
@@ -16,15 +19,51 @@
   .container{
     flex-wrap: wrap;
   }
-  .card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 16px;
-    margin: 8px;
-    text-align: center;
-    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
-  }
   
+
+  .card {
+    
+      display: block;
+      position: relative;
+      background-color: #f2f8f9;
+      border-radius: 4px;
+      padding: 32px 24px;
+      margin: 12px;
+      text-decoration: none;
+      z-index: 0;
+      overflow: hidden;
+      cursor: pointer;
+    
+      &:before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: -16px;
+        right: -16px;
+        background: #7ea1f9e0;
+        height: 50px;
+        width: 56px;
+        border-radius: 32px;
+        transform: scale(1);
+        transform-origin: 50% 50%;
+        transition: transform 0.50s ease-in-out;
+      }
+      &:hover:before {
+        transform: scale(21);
+      }
+    }
+    
+    .card:hover {
+      p {
+        transition: all 0.3s ease-out;
+        color: rgba(244, 244, 244, 0.8);
+      }
+      h3 {
+        transition: all 0.3s ease-out;
+         color: rgba(244, 244, 244, 0.8);
+      }
+    }
+    
   .grid {
     display: flex;
     justify-content: center;
@@ -37,11 +76,153 @@
     align-items: center;
     justify-content: space-around;
   }
-  .more-cards {
+  /* .more-cards {
     display: flex;
     justify-content: center;
     gap: 16px;
     flex-wrap: wrap;
     margin-top: 16px;
+  } */
+  .icon-wrapper {
+    background: linear-gradient(45deg, #50a6ca, #fefefe);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 10px;
+    color:#5ea5eb;
+    
+  }
+
+  
+  .App {
+    text-align: center;
+  }
+  h1{
+    color: rgb(255, 166, 0);
   }
   
+  #Calendar {
+    margin: auto;
+    margin-top: 50px;
+    display: flex;
+    width: 100%;
+  }
+  .rbc-calander{
+    width: 60%;
+  }
+  
+  .rbc-month-view{
+    flex-basis: 500px !important;
+  }
+  
+  .rbc-toolbar-label {
+    font-weight: bold;
+    font-size: 22px;
+    color: rgb(37, 66, 197)
+  }
+  
+  .rbc-date-cell {
+    color: rgb(15, 114, 226);
+  }
+  
+  .rbc-today {
+    background-color: rgb(196, 226, 250) !important;
+  }
+  
+  @media (max-width: 480px) {
+    .rbc-toolbar {
+      display: block !important;
+    }
+  }
+   button{
+    border: none;
+    padding: 5px;
+    color: black;
+    background-color:rgb(240 240 240);
+    padding:10px;
+  }
+  .btn-group{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  /* Flex container to hold the calendar and cards */
+.flex-container {
+  display: flex;
+  width: 100%;
+  margin-top: 25px;
+  
+}
+
+/* Flex item for the calendar */
+.calendar-container {
+  flex: 0 0 60%;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+/* Flex item for the cards */
+.cardcontainer {
+  flex: 0 0 40%; 
+  box-sizing: border-box;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap; 
+  align-content: flex-start;
+}
+.icon{
+  font-size: 45px;
+}
+.textstyle{
+  font-size: 14px !important  ;
+  margin-top: 20px;
+}
+.cardsec2 {
+  flex: 0 0 48%; 
+  box-sizing: border-box;
+  margin: 1%;
+  height:150px;
+  padding-top:20px;
+  text-align: center;
+  border-radius: 10px;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: .15rem;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  cursor: pointer;
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: color;
+    border-radius: 10rem;
+    z-index: -2;
+  }
+  &:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: darken(color, 15%);
+    transition: all .3s;
+    border-radius: 10rem;
+    z-index: -1;
+  }
+  &:hover {
+    color: #495fcd;
+    background: linear-gradient(45deg, #9ba4ec, #fefefe);
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+    &:before {
+      width: 100%;
+    }
+  }
+}

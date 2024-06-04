@@ -1,36 +1,23 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import Header from './components/header.js';
-import Footer from './components/footer.js';
-import Login from './components/loginpage.js';
-
-
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './components/loginpage';
+import Dashboard from './components/pages/home.jsx';
+import EmployeeDetails from './components/pages/employeedetails.jsx';
+import Layout from './layout.js';
 import './App.css';
-
 
 function App() {
   return (
     <Router>
-      <Main />
-    </Router>
-  );
-}
-
-function Main() {
-  const location = useLocation();
-
-  return (
-    <div className="App">
-      {location.pathname !== '/login' && <Header />}
-      <main>
-        <Routes>
-          
-          <Route path="/login" element={<Login />} />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Layout />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="employeedetails" element={<EmployeeDetails />} />
           {/* Add more routes as needed */}
-        </Routes>
-      </main>
-      {location.pathname !== '/login' && <Footer />}
-    </div>
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 
