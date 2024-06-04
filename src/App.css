@@ -13,6 +13,9 @@ body {
  
   margin-top: 5rem;
 }
+.content-wrapper{
+  width:100%
+}
 .glass-box {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 15px;

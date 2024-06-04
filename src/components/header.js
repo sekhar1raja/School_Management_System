@@ -16,7 +16,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faChalkboardTeacher, faGraduationCap, faGrip, faUserGraduate, faChartLine, faBook, faClipboardUser, faTrophy } from '@fortawesome/free-solid-svg-icons';
-
+import {Link} from 'react-router-dom'
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -128,19 +128,20 @@ export default function Dashboard() {
           <Divider />
           <List component="nav">
             <ListSubheader inset sx={listStyles.subheader}>Admin</ListSubheader>
-            <ListItem button sx={listStyles.listItem}>
+            <ListItem button component={Link} to="/Dashboard"  sx={listStyles.listItem}>
               <ListItemIcon sx={listStyles.listItemIcon}>
                 <FontAwesomeIcon icon={faGrip} />
               </ListItemIcon>
+              
               <ListItemText primary="Dashboard" />
             </ListItem>
-            <ListItem button sx={listStyles.listItem}>
+            <ListItem button  component={Link} to="/EmployeeDetails" sx={listStyles.listItem}>
               <ListItemIcon sx={listStyles.listItemIcon}>
                 <FontAwesomeIcon icon={faUser} />
               </ListItemIcon>
               <ListItemText primary="Employee Details" />
             </ListItem>
-            <ListItem button sx={listStyles.listItem}>
+            <ListItem button component={Link} to="/studentdetails" sx={listStyles.listItem}>
               <ListItemIcon sx={listStyles.listItemIcon}>
                 <FontAwesomeIcon icon={faUserGraduate} />
               </ListItemIcon>

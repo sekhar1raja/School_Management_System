@@ -8,7 +8,7 @@ import TimePicker from "@mui/lab/TimePicker";
 import AdapterMoment from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser,  faChalkboardTeacher, faBullhorn } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faChalkboardTeacher, faBullhorn } from '@fortawesome/free-solid-svg-icons';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import CustomToolbar from "./customtoolbar";
 import '../pages/style.css';
@@ -16,28 +16,26 @@ import '../pages/style.css';
 const localizer = momentLocalizer(moment);
 
 function Cards() {
-    // Define an array of objects containing the icon, color, and text
-    const cardData = [
-      { icon: faUser, color: "#FF5733", text: "Student" },
-      { icon: faChalkboardTeacher, color: "#3399FF", text: "Teacher" },
-      { icon: faUser, color: "rgb(105 175 122)", text: "Parent" },
-      { icon: faBullhorn, color: "rgb(96 102 161)", text: "Announcements" }
-    ];
-  
-    return (
-      <div className="cardcontainer">
-        {cardData.map((card, index) => (
-          <div className="cardsec2" key={index}>
-            <div className="icon-container" style={{ color: card.color }}>
-              <FontAwesomeIcon icon={card.icon} className="icon " />
-            </div>
-            {/* Display the text dynamically */}
-            <div class="textstyle">Add {card.text}</div>
+  const cardData = [
+    { icon: faUser, color: "#FF5733", text: "Student" },
+    { icon: faChalkboardTeacher, color: "#3399FF", text: "Teacher" },
+    { icon: faUser, color: "rgb(105 175 122)", text: "Parent" },
+    { icon: faBullhorn, color: "rgb(96 102 161)", text: "Announcements" }
+  ];
+
+  return (
+    <div className="cardcontainer">
+      {cardData.map((card, index) => (
+        <div className="cardsec2" key={index}>
+          <div className="icon-container" style={{ color: card.color }}>
+            <FontAwesomeIcon icon={card.icon} className="icon" />
           </div>
-        ))}
-      </div>
-    );
-  }
+          <div className="textstyle">Add {card.text}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 class Calendar extends Component {
   constructor() {
@@ -203,32 +201,39 @@ class Calendar extends Component {
             onClose={this.handleClose}
             aria-labelledby="form-dialog-title"
           >
-            <div>
+            <div className="dialog-content">
               <h2>Add an Event {moment(this.state.start).format("MMMM Do YYYY")}</h2>
-              {appointmentActions}
+              
               <TextField
                 label="Title"
                 onChange={e => {
                   this.setTitle(e.target.value);
                 }}
+                fullWidth
+                margin="normal"
               />
-              <br />
               <TextField
                 label="Description"
                 onChange={e => {
                   this.setDescription(e.target.value);
                 }}
+                fullWidth
+                margin="normal"
+                multiline
               />
+              <div className="dialog-actions">{appointmentActions}</div>
               <LocalizationProvider dateAdapter={AdapterMoment}>
                 <TimePicker
                   label="Start Time"
                   value={this.state.start}
                   onChange={this.handleStartTime}
+                  renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
                 />
                 <TimePicker
                   label="End Time"
                   value={this.state.end}
                   onChange={this.handleEndTime}
+                  renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
                 />
               </LocalizationProvider>
             </div>
@@ -239,24 +244,26 @@ class Calendar extends Component {
             onClose={this.handleClose}
             aria-labelledby="form-dialog-title"
           >
-            <div>
+            <div className="dialog-content">
               <h2>View/Edit Appointment of {moment(this.state.start).format("MMMM Do YYYY")}</h2>
-              {eventActions}
+              <div className="dialog-actions">{eventActions}</div>
               <TextField
                 label="Title"
-                defaultValue=
-                {this.state.title}
+                defaultValue={this.state.title}
                 onChange={e => {
                   this.setTitle(e.target.value);
                 }}
+                fullWidth
+                margin="normal"
               />
-              <br />
               <TextField
                 label="Description"
                 defaultValue={this.state.desc}
                 onChange={e => {
                   this.setDescription(e.target.value);
                 }}
+                fullWidth
+                margin="normal"
                 multiline
               />
               <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -264,11 +271,13 @@ class Calendar extends Component {
                   label="Start Time"
                   value={this.state.start}
                   onChange={this.handleStartTime}
+                  renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
                 />
                 <TimePicker
                   label="End Time"
                   value={this.state.end}
                   onChange={this.handleEndTime}
+                  renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
                 />
               </LocalizationProvider>
             </div>

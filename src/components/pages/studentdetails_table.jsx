@@ -8,29 +8,30 @@ const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'firstName', headerName: 'First name', width: 130 },
     { field: 'lastName', headerName: 'Last name', width: 130 },
-    { field: 'department', headerName: 'Department ', width: 130 },
+    { field: 'section', headerName: 'Section ' },
     { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'Experience', headerName: 'Experience', type: 'number', width: 130 },
+    { field: 'PhoneNumber', headerName: 'PhoneNumber', type: 'number', width: 130 },
 ];
 
-const initialRows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', department: "Mathematics", email: "snowjon@gmail.com", Experience: 35 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', department: "Mathematics", email: "snowjon@gmail.com", Experience: 42 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', department: "Mathematics", email: "snowjon@gmail.com", Experience: 45 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', department: "Mathematics", email: "snowjon@gmail.com", Experience: 16 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', department: "Mathematics", email: "snowjon@gmail.com", Experience: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, Experience: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', department: "Mathematics", email: "snowjon@gmail.com", Experience: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', department: "Mathematics", email: "snowjon@gmail.com", Experience: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', department: "Mathematics", email: "snowjon@gmail.com", Experience: 65 },
+const StudentDetails = [
+    { id: 1, lastName: 'Snow', firstName: 'Jon', section: 'Third', email: 'snowjon@gmail.com', PhoneNumber: 5879589562 },
+    { id: 2, lastName: 'Lannister', firstName: 'Cersei', section: 'Fourth', email: 'cersei@gmail.com', PhoneNumber: 8957158962 },
+    { id: 3, lastName: 'Lannister', firstName: 'Jaime', section: 'Eleventh', email: 'jaime@gmail.com', PhoneNumber: 9856471523 },
+    { id: 4, lastName: 'Stark', firstName: 'Arya', section: 'Second', email: 'arya@gmail.com', PhoneNumber: 2299574896 },
+    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', section: 'First', email: 'daenerys@gmail.com', PhoneNumber: 8597845612 },
+    { id: 6, lastName: 'Melisandre', firstName: 'Melisandre', section: 'Tenth', email: 'melisandre@gmail.com', PhoneNumber: 5896784596 },
+    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', section: 'Eleventh', email: 'ferrara@gmail.com', PhoneNumber: 2525645895 },
+    { id: 8, lastName: 'Frances', firstName: 'Rossini', section: 'Tenth', email: 'rossini@gmail.com', PhoneNumber: 2589456213 },
+    { id: 9, lastName: 'Roxie', firstName: 'Harvey', section: 'Ninth', email: 'harvey@gmail.com', PhoneNumber: 78965452123 },
 ];
+
 
 export default function DataTable() {
-    const [rows, setRows] = React.useState(initialRows);
+    const [rows, setRows] = React.useState(StudentDetails);
     const [searchTerm, setSearchTerm] = React.useState('');
 
     const handleSearch = () => {
-        const filteredRows = initialRows.filter(row =>
+        const filteredRows = StudentDetails.filter(row =>
             Object.values(row).some(value =>
                 value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
             )
