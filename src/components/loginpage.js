@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,22 +10,77 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import Dropdown from 'react-dropdown';
+import { useNavigate } from "react-router-dom";
+import 'react-dropdown/style.css';  // Import styles for the dropdown
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-
-
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
+  const [role, setRole] = useState(null);
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+
+  const handleSelect = (option) => {
+    setRole(option.value);
+  };
+
+  const options = [
+    { value: 1, label: 'admin' },
+    { value: 2, label: 'student' },
+    { value: 3, label: 'teacher' },
+  ];
+
+  const defaultOption = options[0];
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const userData = {
       email: data.get('email'),
       password: data.get('password'),
-    });
+      roles: {
+        id: role,
+      },
+    };
+
+    try {
+      const response = await fetch('http://localhost:8080/user/userLogin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+        
+      }
+
+      const result = await response.json();
+      console.log(result.roles);
+        console.log(result.roles);
+      
+      if (result.roles.id === 1) {
+        setMessage('Admin login successful');
+      } else if (result.roles.id === 2) {
+        setMessage('Student login successful');
+      } else if (result.roles.id === 3) {
+        setMessage('Teacher login successful');
+      } else {
+        setMessage('Unknown role');
+      }
+      navigate("/dashboard");
+
+      console.log(result);
+      // Handle the response accordingly
+      // For example, redirect to another page or show a success message
+    } catch (error) {
+      console.error('There was a problem with your fetch operation:', error);
+      setMessage('Login failed');
+    }
   };
 
   return (
@@ -56,9 +111,7 @@ export default function SignInSide() {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-             
-            </Avatar>
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}></Avatar>
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
@@ -82,6 +135,12 @@ export default function SignInSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+              />
+              <Dropdown
+                options={options}
+                onChange={handleSelect}
+                value={defaultOption}
+                placeholder="Select an option"
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -107,7 +166,6 @@ export default function SignInSide() {
                   </Link>
                 </Grid>
               </Grid>
-             
             </Box>
           </Box>
         </Grid>

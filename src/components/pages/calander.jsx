@@ -8,7 +8,7 @@ import TimePicker from "@mui/lab/TimePicker";
 import AdapterMoment from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faChalkboardTeacher, faBullhorn } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faChalkboardTeacher, faBullhorn, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import CustomToolbar from "./customtoolbar";
 import '../pages/style.css';
@@ -19,7 +19,7 @@ function Cards() {
   const cardData = [
     { icon: faUser, color: "#FF5733", text: "Student" },
     { icon: faChalkboardTeacher, color: "#3399FF", text: "Teacher" },
-    { icon: faUser, color: "rgb(105 175 122)", text: "Parent" },
+    { icon: faCalendar, color: "rgb(105 175 122)", text: "Event" },
     { icon: faBullhorn, color: "rgb(96 102 161)", text: "Announcements" }
   ];
 
