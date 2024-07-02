@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Header from './components/header.js';
-import Footer from './components/footer.js';
+
 import './App.css';
 
 const Layout = () => {

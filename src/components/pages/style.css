@@ -1,4 +1,5 @@
 /* App.css */
+
 body{
   background-color: white;
 }
@@ -13,57 +14,40 @@ body{
     font-size: 18px;
   }
   
-  main {
-    padding: 20px;
-  }
+ 
   
   .container{
     flex-wrap: wrap;
   }
   
-
   .card {
     
-      display: block;
-      position: relative;
-      background-color: #f2f8f9;
-      border-radius: 4px;
-      padding: 32px 24px;
-      margin: 12px;
-      text-decoration: none;
-      z-index: 0;
-      overflow: hidden;
-      cursor: pointer;
-    
-      &:before {
-        content: "";
-        position: absolute;
-        z-index: -1;
-        top: -16px;
-        right: -16px;
-        background: #7ea1f9e0;
-        height: 50px;
-        width: 56px;
-        border-radius: 32px;
-        transform: scale(1);
-        transform-origin: 50% 50%;
-        transition: transform 0.50s ease-in-out;
-      }
-      &:hover:before {
-        transform: scale(21);
-      }
+    display: block;
+    position: relative;
+    border-radius: 4px;
+    padding: 20px 20px;
+    text-decoration: none;
+    z-index: 0;
+    overflow: hidden;
+    cursor: pointer;
+    border: none;
+   
+
     }
-    
-    .card:hover {
-      p {
-        transition: all 0.3s ease-out;
-        color: rgba(244, 244, 244, 0.8);
-      }
-      h3 {
-        transition: all 0.3s ease-out;
-         color: rgba(244, 244, 244, 0.8);
-      }
+  .card:hover {
+    box-shadow: 7px 7px 29px -9px rgb(202, 199, 199);
+    -webkit-box-shadow: 7px 7px 29px -9px rgb(202, 199, 199);
+    -moz-box-shadow: 7px 7px 29px -9px rgb(202, 199, 199);
+    p {
+      transition: all 0.3s ease-out;
+      color: rgba(26, 25, 25, 0.8);
     }
+    h3 {
+      transition: all 0.3s ease-out;
+      color: rgba(26, 25, 25, 0.8);
+    }
+  }
+  
     
   .grid {
     display: flex;
@@ -77,24 +61,32 @@ body{
     align-items: center;
     justify-content: space-around;
   }
-  /* .more-cards {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-top: 16px;
-  } */
+  
   .icon-wrapper {
-    background: linear-gradient(45deg, #50a6ca, #fefefe);
+  
     border-radius: 50%;
     width: 50px;
     height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto 10px;
-    color:#5ea5eb;
+
     
+    }
+
+  .row .icon-1 .card {
+
+    color:#6F83CA;
+  }
+
+  .row .icon-2 .card {
+
+    color:#FF7555;
+  }
+
+  .row .icon-3 .card {
+
+    color:#F7871B;
   }
 
   
@@ -174,64 +166,30 @@ body{
   padding: 10px;
   display: flex;
   flex-wrap: wrap; 
-  align-content: flex-start;
-  background-image: url("https://source.unsplash.com/E8Ufcyxz514/2400x1823");
+  flex-direction: column;
 }
 .icon{
   font-size: 45px;
 }
-.textstyle{
-  font-size: 14px !important  ;
-  margin-top: 20px;
-}
-.cardsec2 {
-  flex: 0 0 48%; 
-  box-sizing: border-box;
-  margin: 1%;
-  height:150px;
-  padding-top:20px;
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 1rem;
-  letter-spacing: .15rem;
-  transition: all .3s;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, .25);
-  border-radius: 20px;
-  background-color: rgba(255, 255, 255, 0.45);
-  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.25);
 
-  backdrop-filter: blur(15px);
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background-color: color;
-    border-radius: 10rem;
-    z-index: -2;
-  }
-  &:before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background-color: darken(color, 15%);
-    transition: all .3s;
-    border-radius: 10rem;
-    z-index: -1;
-  }
-  &:hover {
-    color: #495fcd;
-    background: linear-gradient(45deg, #9ba4ec, hsl(0, 0%, 100%));
-    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
-    &:before {
-      width: 100%;
-    }
-  }
+.cardsec2 {
+    box-sizing: border-box;
+    z-index: 1;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1em;
+    border:0.2px solid rgb(202, 199, 199);
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 14px;
+    cursor: pointer;
+ 
+}
+.cardsec2:hover{
+  box-shadow: 7px 7px 29px -9px rgb(202, 199, 199);
+  -webkit-box-shadow: 7px 7px 29px -9px rgb(202, 199, 199);
+  -moz-box-shadow: 7px 7px 29px -9px rgb(202, 199, 199);
 }
  /* Dilaouge box css */
  .dialog-content {
@@ -373,3 +331,4 @@ body{
     font-size: 16px;
   }
 }
+/* teacherdetails*/

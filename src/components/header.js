@@ -48,6 +48,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
         duration: theme.transitions.duration.enteringScreen,
       }),
       boxSizing: 'border-box',
+      backgroundColor: '#2D2D2D',
+      color:'#ffffff',
       ...(!open && {
         overflowX: 'hidden',
         transition: theme.transitions.create('width', {
@@ -73,19 +75,25 @@ export default function Dashboard() {
 
   const listStyles = {
     subheader: {
-      padding: '8px',
+     
+      alignItems: 'start',    
+      background: '#F7871B',   
+      color: '#fff',           
+      textAlign: 'start',     
+      paddingLeft: '23px',
     },
     listItem :{
       '&:hover': {
-        background: '#b0d7f9',
+        background: '#F1B780',
         color: 'black',
         fontweight: 'bold',
       },
-     
+    
     },
     listItemIcon: {
-      color: 'black',
+      color: '#ffff',
     },
+   
   };
 
   return (
@@ -131,8 +139,7 @@ export default function Dashboard() {
             <ListItem button component={Link} to="/Dashboard"  sx={listStyles.listItem}>
               <ListItemIcon sx={listStyles.listItemIcon}>
                 <FontAwesomeIcon icon={faGrip} />
-              </ListItemIcon>
-              
+              </ListItemIcon>              
               <ListItemText primary="Dashboard" />
             </ListItem>
             <ListItem button  component={Link} to="/EmployeeDetails" sx={listStyles.listItem}>
@@ -179,10 +186,10 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Student Details" />
             </ListItem>
-            <ListItem button sx={listStyles.listItem}>
-              <ListItemIcon sx={listStyles.listItemIcon}>
-                <FontAwesomeIcon icon={faUser} />
-              </ListItemIcon>
+            <ListItem button component={Link} to="/teacherDetails"  sx={listStyles.listItem}>
+            <ListItemIcon sx={listStyles.listItemIcon}>
+            <FontAwesomeIcon icon={faUser} />
+              </ListItemIcon>              
               <ListItemText primary="Profile" />
             </ListItem>
             <Divider />

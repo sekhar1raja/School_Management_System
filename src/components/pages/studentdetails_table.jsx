@@ -3,6 +3,9 @@ import { DataGrid } from '@mui/x-data-grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link } from 'react-router-dom'; 
+import { Edit } from '@mui/icons-material'; 
+import Tooltip from '@mui/material/Tooltip'; // Import Tooltip component
 
 const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -51,10 +54,15 @@ export default function DataTable() {
                         fullWidth
                     />
                 </div>
-                <div className="col-3 d-flex">
+                <div className="col-3 d-flex align-items-centre">
                     <Button variant="contained" color="primary" onClick={handleSearch}>
                         Search
                     </Button>
+                    <Tooltip title="Add Employee">
+                        <Link to="/adminform"> {/* Adjust the route to your admin form */}
+                            <Edit fontSize="large" color="primary" />
+                        </Link>
+                    </Tooltip>
                 </div>
             </div>
             <DataGrid

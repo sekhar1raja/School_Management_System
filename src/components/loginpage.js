@@ -19,11 +19,15 @@ const defaultTheme = createTheme();
 
 export default function SignInSide() {
   const [role, setRole] = useState(null);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [roleError, setRoleError] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   const handleSelect = (option) => {
     setRole(option.value);
+    setRoleError(''); // Clear role error when a role is selected
   };
 
   const options = [
@@ -34,12 +38,47 @@ export default function SignInSide() {
 
   const defaultOption = options[0];
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const email = data.get('email');
+    const password = data.get('password');
+
+    let isValid = true;
+
+    if (!validateEmail(email)) {
+      setEmailError('Invalid email address');
+      isValid = false;
+    } else {
+      setEmailError('');
+    }
+
+    if (!password) {
+      setPasswordError('Password is required');
+      isValid = false;
+    } else {
+      setPasswordError('');
+    }
+
+    if (!role) {
+      setRoleError('Role is required');
+      isValid = false;
+    } else {
+      setRoleError('');
+    }
+
+    if (!isValid) {
+      return;
+    }
+
     const userData = {
-      email: data.get('email'),
-      password: data.get('password'),
+      email,
+      password,
       roles: {
         id: role,
       },
@@ -55,14 +94,12 @@ export default function SignInSide() {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
-        
+        throw new Error(`Network response was not ok: ${response.statusText}`);
       }
 
       const result = await response.json();
       console.log(result.roles);
-        console.log(result.roles);
-      
+
       if (result.roles.id === 1) {
         setMessage('Admin login successful');
       } else if (result.roles.id === 2) {
@@ -75,8 +112,6 @@ export default function SignInSide() {
       navigate("/dashboard");
 
       console.log(result);
-      // Handle the response accordingly
-      // For example, redirect to another page or show a success message
     } catch (error) {
       console.error('There was a problem with your fetch operation:', error);
       setMessage('Login failed');
@@ -93,7 +128,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
+            backgroundImage: 'url(https://res.cloudinary.com/dh1tomppe/image/upload/v1718041081/Group_1171275024_vadzwr.jpg)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -125,6 +160,8 @@ export default function SignInSide() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                error={!!emailError}
+                helperText={emailError}
               />
               <TextField
                 margin="normal"
@@ -135,13 +172,20 @@ export default function SignInSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                error={!!passwordError}
+                helperText={passwordError}
               />
               <Dropdown
                 options={options}
                 onChange={handleSelect}
-                value={defaultOption}
+                value={role ? options.find(opt => opt.value === role) : null}
                 placeholder="Select an option"
               />
+              {roleError && (
+                <Typography color="error" variant="body2">
+                  {roleError}
+                </Typography>
+              )}
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
@@ -154,6 +198,11 @@ export default function SignInSide() {
               >
                 Sign In
               </Button>
+              {message && (
+                <Typography color="error" variant="body2">
+                  {message}
+                </Typography>
+              )}
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
@@ -161,7 +210,7 @@ export default function SignInSide() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/registration" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

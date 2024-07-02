@@ -6,6 +6,11 @@ import Dashboard from './components/pages/home';
 import EmployeeDetails from './components/pages/employeedetails';
 import StudentDetails from './components/pages/studentdetails_table';
 import TeacherDashboard from './components/pages/Teacher/teacherdashboard';
+import TeacherDetails from './components/pages/Teacher/teacherdetails';
+import StudentDetailsForm from './components/pages/student/studentdetails'; 
+import AdminForm from './components/pages/Adminform';
+import Events from './components/pages/Teacher/events';
+
 import Layout from './layout';
 import './App.css';
 
@@ -19,7 +24,11 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="employeedetails" element={<EmployeeDetails />} />
           <Route path="studentdetails" element={<StudentDetails />} />
+          <Route path="studentdetailsform" element={<StudentDetailsForm />} />
           <Route path="teacherdashboard" element={<TeacherDashboard />} />
+          <Route path="teacherDetails" element={<TeacherDetails />} />
+          <Route path="adminform" element={<AdminForm />} />
+          <Route path="events" element={<Events />} />
           {/* Add more routes as needed */}
         </Route>
       </Routes>
