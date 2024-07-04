@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Dropdown from 'react-dropdown';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import 'react-dropdown/style.css';  // Import styles for the dropdown
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -100,6 +100,9 @@ export default function SignInSide() {
       const result = await response.json();
       console.log(result.roles);
 
+      // Store user role in local storage
+      localStorage.setItem('userRole', result.roles.id);
+
       if (result.roles.id === 1) {
         setMessage('Admin login successful');
       } else if (result.roles.id === 2) {
@@ -109,6 +112,7 @@ export default function SignInSide() {
       } else {
         setMessage('Unknown role');
       }
+
       navigate("/dashboard");
 
       console.log(result);

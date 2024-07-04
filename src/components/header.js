@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -15,8 +15,15 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faChalkboardTeacher, faGraduationCap, faGrip, faUserGraduate, faChartLine, faBook, faClipboardUser, faTrophy } from '@fortawesome/free-solid-svg-icons';
-import {Link} from 'react-router-dom'
+import { faUser, faChalkboardTeacher, faGraduationCap, faGrip, faUserGraduate, faChartLine, faBook, faClipboardUser, faTrophy, faSignOut } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Typography from '@mui/material/Typography';
+import { useTheme } from '@emotion/react';
+
+
+
+
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -49,7 +56,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
       }),
       boxSizing: 'border-box',
       backgroundColor: '#2D2D2D',
-      color:'#ffffff',
+      color: '#ffffff',
       ...(!open && {
         overflowX: 'hidden',
         transition: theme.transitions.create('width', {
@@ -65,166 +72,296 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
+
 const defaultTheme = createTheme();
 
 export default function Dashboard() {
   const [open, setOpen] = useState(true);
+  const [userRole, setUserRole] = useState(null);
+  const theme = useTheme();
+  const navigate = useNavigate();
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
+
+
   const listStyles = {
     subheader: {
-     
-      alignItems: 'start',    
-      background: '#F7871B',   
-      color: '#fff',           
-      textAlign: 'start',     
+      alignItems: 'start',
+      background: '#0F67B1',
+      color: '#fff',
+      textAlign: 'start',
       paddingLeft: '23px',
     },
-    listItem :{
+    listItem: {
       '&:hover': {
-        background: '#F1B780',
-        color: 'black',
+        background: '#3FA2F6',
+        color: 'Black',
         fontweight: 'bold',
       },
-    
     },
     listItemIcon: {
       color: '#ffff',
     },
-   
   };
 
-  return (
-    <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
+  const handleLogout = () => {
+   
+    // Navigate to login page
+    navigate('/login');
+  };
+
+  useEffect(() => {
+    // Read user role from local storage
+    const storedUserRole = localStorage.getItem('userRole');
+    setUserRole(parseInt(storedUserRole, 10));
+  }, []);
+  const renderTabs = () =>{
+    if (userRole === 1) {
+      return (
+      <>
+                <ListSubheader inset sx={listStyles.subheader}>
+                  Admin
+                </ListSubheader>
+                <ListItem button component={Link} to="/Dashboard" sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faGrip} />
+                  </ListItemIcon>
+                  <ListItemText primary="Dashboard" />
+                </ListItem>
+                <ListItem button component={Link} to="/EmployeeDetails" sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faUser} />
+                  </ListItemIcon>
+                  <ListItemText primary="Employee Details" />
+                </ListItem>
+                <ListItem button component={Link} to="/studentdetails" sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faUserGraduate} />
+                  </ListItemIcon>
+                  <ListItemText primary="Student Details" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faChartLine} />
+                  </ListItemIcon>
+                  <ListItemText primary="Financial Management " />
+                </ListItem>
+                <Divider />
+                <ListSubheader inset sx={listStyles.subheader}>
+                  Teacher
+                </ListSubheader>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faGrip} />
+                  </ListItemIcon>
+                  <ListItemText primary="Dashboard" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faBook} />
+                  </ListItemIcon>
+                  <ListItemText primary="Course Details" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faGraduationCap} />
+                  </ListItemIcon>
+                  <ListItemText primary="Semester Progress" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faChalkboardTeacher} />
+                  </ListItemIcon>
+                  <ListItemText primary="Student Details" />
+                </ListItem>
+                <ListItem button component={Link} to="/teacherDetails" sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faUser} />
+                  </ListItemIcon>
+                  <ListItemText primary="Profile" />
+                </ListItem>
+                <Divider />
+                <ListSubheader inset sx={listStyles.subheader}>
+                  Student
+                </ListSubheader>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faGrip} />
+                  </ListItemIcon>
+                  <ListItemText primary="Dashboard" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faClipboardUser} />
+                  </ListItemIcon>
+                  <ListItemText primary="Attendance" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faTrophy} />
+                  </ListItemIcon>
+                  <ListItemText primary="Academics" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faGraduationCap} />
+                  </ListItemIcon>
+                  <ListItemText primary="Profile" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faSignOut} />
+                  </ListItemIcon>
+                  <button onClick={handleLogout}>Logout</button>
+                </ListItem>
+          
+     </>
+      );
+  }
+  if (userRole === 2) {
+    return (
+      <>
+         <ListSubheader inset sx={listStyles.subheader}>
+                  Teacher
+                </ListSubheader>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faGrip} />
+                  </ListItemIcon>
+                  <ListItemText primary="Dashboard" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faBook} />
+                  </ListItemIcon>
+                  <ListItemText primary="Course Details" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faGraduationCap} />
+                  </ListItemIcon>
+                  <ListItemText primary="Semester Progress" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faChalkboardTeacher} />
+                  </ListItemIcon>
+                  <ListItemText primary="Student Details" />
+                </ListItem>
+                <ListItem button component={Link} to="/teacherDetails" sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faUser} />
+                  </ListItemIcon>
+                  <ListItemText primary="Profile" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faSignOut} />
+                  </ListItemIcon>
+                  <button onClick={handleLogout}>Logout</button>
+                </ListItem>
+      </>
+    );
+  }
+  if (userRole === 3) {
+    return (
+      <>
+       <ListSubheader inset sx={listStyles.subheader}>
+                  Student
+                </ListSubheader>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faGrip} />
+                  </ListItemIcon>
+                  <ListItemText primary="Dashboard" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faClipboardUser} />
+                  </ListItemIcon>
+                  <ListItemText primary="Attendance" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faTrophy} />
+                  </ListItemIcon>
+                  <ListItemText primary="Academics" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faGraduationCap} />
+                  </ListItemIcon>
+                  <ListItemText primary="Profile" />
+                </ListItem>
+                <ListItem button sx={listStyles.listItem}>
+                  <ListItemIcon sx={listStyles.listItemIcon}>
+                    <FontAwesomeIcon icon={faSignOut} />
+                  </ListItemIcon>
+                  <button onClick={handleLogout}>Logout</button>
+                </ListItem>
+      </>
+    );
+  }
+
+  return null;
+
+};
+return (
+  <ThemeProvider theme={theme}>
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar position="absolute" open={open}>
+        <Toolbar
+          sx={{
+            pr: '24px', // keep right padding when drawer closed
+          }}
+        >
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={toggleDrawer}
             sx={{
-              pr: '24px', // keep right padding when drawer closed
+              marginRight: '36px',
+              ...(open && { display: 'none' }),
             }}
           >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
-            }}
+            <MenuIcon />
+          </IconButton>
+          <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap
+            sx={{ flexGrow: 1 }}
           >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            <ListSubheader inset sx={listStyles.subheader}>Admin</ListSubheader>
-            <ListItem button component={Link} to="/Dashboard"  sx={listStyles.listItem}>
-              <ListItemIcon sx={listStyles.listItemIcon}>
-                <FontAwesomeIcon icon={faGrip} />
-              </ListItemIcon>              
-              <ListItemText primary="Dashboard" />
-            </ListItem>
-            <ListItem button  component={Link} to="/EmployeeDetails" sx={listStyles.listItem}>
-              <ListItemIcon sx={listStyles.listItemIcon}>
-                <FontAwesomeIcon icon={faUser} />
-              </ListItemIcon>
-              <ListItemText primary="Employee Details" />
-            </ListItem>
-            <ListItem button component={Link} to="/studentdetails" sx={listStyles.listItem}>
-              <ListItemIcon sx={listStyles.listItemIcon}>
-                <FontAwesomeIcon icon={faUserGraduate} />
-              </ListItemIcon>
-              <ListItemText primary="Student Details" />
-            </ListItem>
-            <ListItem button sx={listStyles.listItem}>
-              <ListItemIcon sx={listStyles.listItemIcon}>
-                <FontAwesomeIcon icon={faChartLine} />
-              </ListItemIcon>
-              <ListItemText primary="Financial Management " />
-            </ListItem>
-            <Divider />
-            <ListSubheader inset sx={listStyles.subheader}>Teacher</ListSubheader>
-            <ListItem button sx={listStyles.listItem}>
-              <ListItemIcon sx={listStyles.listItemIcon}>
-                <FontAwesomeIcon icon={faGrip} />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </ListItem>
-            <ListItem button sx={listStyles.listItem}>
-              <ListItemIcon sx={listStyles.listItemIcon}>
-                <FontAwesomeIcon icon={faBook} />
-              </ListItemIcon>
-              <ListItemText primary="Course Details" />
-            </ListItem>
-            <ListItem button sx={listStyles.listItem}>
-              <ListItemIcon sx={listStyles.listItemIcon}>
-                <FontAwesomeIcon icon={faGraduationCap} />
-              </ListItemIcon>
-              <ListItemText primary="Semester Progress" />
-            </ListItem>
-            <ListItem button sx={listStyles.listItem}>
-              <ListItemIcon sx={listStyles.listItemIcon}>
-                <FontAwesomeIcon icon={faChalkboardTeacher} />
-              </ListItemIcon>
-              <ListItemText primary="Student Details" />
-            </ListItem>
-            <ListItem button component={Link} to="/teacherDetails"  sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-            <FontAwesomeIcon icon={faUser} />
-              </ListItemIcon>              
-              <ListItemText primary="Profile" />
-            </ListItem>
-            <Divider />
-            <ListSubheader inset sx={listStyles.subheader}>Student</ListSubheader>
-            <ListItem button sx={listStyles.listItem}>
-              <ListItemIcon sx={listStyles.listItemIcon}>
-                <FontAwesomeIcon icon={faGrip} />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </ListItem>
-            <ListItem button sx={listStyles.listItem}>
-              <ListItemIcon sx={listStyles.listItemIcon}>
-                <FontAwesomeIcon icon={faClipboardUser} />
-              </ListItemIcon>
-              <ListItemText primary="Attendance" />
-            </ListItem>
-            <ListItem button sx={listStyles.listItem}>
-              <ListItemIcon sx={listStyles.listItemIcon}>
-                <FontAwesomeIcon icon={faTrophy} />
-              </ListItemIcon>
-              <ListItemText primary="Academics" />
-            </ListItem>
-            <ListItem button sx={listStyles.listItem}>
-              <ListItemIcon sx={listStyles.listItemIcon}>
-                <FontAwesomeIcon icon={faGraduationCap} />
-              </ListItemIcon>
-              <ListItemText primary="Profile" />
-            </ListItem>
-          </List>
-        </Drawer>
-        
-          <Toolbar />
-         
-        
-      </Box>
-    </ThemeProvider>
-  );
+            Dashboard
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Drawer variant="permanent" open={open}>
+        <Toolbar
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            px: [1],
+          }}
+        >
+          <IconButton onClick={toggleDrawer}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </Toolbar>
+        <Divider />
+        <List>
+          {renderTabs()}
+        </List>
+      </Drawer>
+    </Box>
+  </ThemeProvider>
+);
 }
+  
