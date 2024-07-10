@@ -53,7 +53,7 @@ export default function DataTable() {
                     <Button variant="contained" color="primary" onClick={handleSearch}>
                         Search
                     </Button>
-                    <Tooltip title="Add Employee">
+                    <Tooltip title="Add Teacher">
                         <Link to="/adminform"> {/* Adjust the route to your admin form */}
                             <Edit fontSize="large" color="primary" />
                         </Link>

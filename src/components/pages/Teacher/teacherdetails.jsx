@@ -8,7 +8,7 @@ function RegistrationPage() {
         <div className="col-lg-12">
           <div className="card shadow-lg p-3 mb-5 bg-white rounded">
             <div className="card-header text-center  text-white " style={{background:'#F7871B'}}>
-              <h2>Register</h2>
+              <h2>Profile</h2>
             </div>
            
             <div className="card-body">

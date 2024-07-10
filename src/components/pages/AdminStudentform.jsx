@@ -18,34 +18,60 @@ function RegistrationPage() {
     address1: "",
     address2: "",
     city: "",
+    state: "",
     postal_code: "",
     country: "",
-    experience: "",
-    professorPosition: {
-      positionId: "",
+    classTable: {
+      classId: "",
     },
-    fees: "", // Assuming this is for fees related to the position
+    section: {
+      sectionId: "",
+    },
+
+    fees: "",
   });
 
-  const [professorPositions, setProfessorPositions] = useState([]);
+ 
+  const [classTable, setClassTable] = useState([]);
+  const [sections, setSections] = useState([]);
 
-  // Fetch Professor positions
+
+ // Fetch Class
   useEffect(() => {
-    const fetchPositions = async () => {
+    const fetchClass = async () => {
       try {
-        const response = await fetch('http://localhost:8080/util/ProfessorPosition');
+        const response = await fetch('http://localhost:8080/util/class');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setProfessorPositions(data);
+        setClassTable(data);
       } catch (error) {
-        console.error('Failed to fetch positions:', error);
+        console.error('Failed to fetch Class:', error);
       }
     };
+      fetchClass();
 
-    fetchPositions();
-  }, []);
+  }, []); 
+
+  // Fetch Sections
+  useEffect(() => {
+    const fetchSection = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/util/section');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setSections(data);
+      } catch (error) {
+        console.error('Failed to fetch section:', error);
+      }
+    };
+      fetchSection();
+
+  }, []); 
+
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -101,27 +127,32 @@ function RegistrationPage() {
         address1: "",
         address2: "",
         city: "",
+        state: "",
         postal_code: "",
         country: "",
-        experience: "",
-
-        professorPosition: {
-          positionId: "",
+        classTable: {
+          classId: "",
         },
+        section: {
+          sectionId: "",
+        },
+
         fees: "",
       });
     } catch (error) {
       console.error('Error:', error);
     }
   };
+
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-lg-12">
           <div className="card shadow-lg p-3 mb-5 bg-white rounded">
-            <div className="card-header text-center text-white" style={{ background: '#F7871B' }}>
-              <h2>Add Professor</h2>
+            <div className="mb-4">
+              <h4 style={{ color: '#525F7F' }}>Add Student  </h4>
             </div>
+
             <div className="">
               <div className="row" style={{ background: '#F7FAFC' }}>
                 <div className="col-md-12">
@@ -263,32 +294,36 @@ function RegistrationPage() {
                           Please provide country.
                         </div>
                       </div>
+                      <div className="mb-3">
+                            <label htmlFor="classTable.classId" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Class</label>
+                            <select className="form-control shadow-sm" id="classTable.classId" name="classTable.classId" value={formData.classTable.classId} onChange={handleChange} required>
+                              <option value="">Select Class</option>
+                              {classTable.map(classStudent => (
+                                <option key={classStudent.classId} value={classStudent.classId}>{classStudent.classStudent}</option>
+                              ))}
+                            </select>
+                            <div className="invalid-feedback">
+                              Please select a class.
+                            </div>
+                          </div>
 
+                          <div className="mb-3">
+                            <label htmlFor="section.sectionId" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Section</label>
+                            <select className="form-control shadow-sm" id="section.sectionId" name="section.sectionId" value={formData.section.sectionId} onChange={handleChange} required>
+                              <option value="">Select Section</option>
+                              {sections.map(section => (
+                                <option key={section.sectionId} value={section.sectionId}>{section.section}</option>
+                              ))}
+                            </select>
+                            <div className="invalid-feedback">
+                              Please select a section.
+                            </div>
+                          </div>
                       <div className="mb-3">
-                        <label htmlFor="experience" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Experience</label>
-                        <input type="text" className="form-control shadow-sm" id="experience" name="experience" value={formData.experience} onChange={handleChange} required />
-                        <div className="invalid-feedback">
-                          Please provide experience.
-                        </div>
-                      </div>
-                      <div className="mb-3">
-                      <label htmlFor="professorPosition.positionId" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Professor Position</label>
-                      <select className="form-control shadow-sm" id="professorPosition.positionId" name="professorPosition.positionId" value={formData.professorPosition.positionId} onChange={handleChange} required>
-                        <option value="">Select Position</option>
-                        {professorPositions.map(position => (
-                          <option key={position.positionId} value={position.positionId}>{position.position}</option>
-                        ))}
-                      </select>
-                      <div className="invalid-feedback">
-                        Please select a professor position.
-                      </div>
-                      </div>
-
-                      <div className="mb-3">
-                        <label htmlFor="fees" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Salary</label>
+                        <label htmlFor="fees" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Fees</label>
                         <input type="text" className="form-control shadow-sm" id="fees" name="fees" value={formData.fees} onChange={handleChange} required />
                         <div className="invalid-feedback">
-                          Please provide Salary.
+                          Please provide fees.
                         </div>
                       </div>
 

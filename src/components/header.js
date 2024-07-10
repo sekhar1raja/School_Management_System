@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import { styled, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
@@ -73,7 +73,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 
-const defaultTheme = createTheme();
+// const defaultTheme = createTheme();
 
 export default function Dashboard() {
   const [open, setOpen] = useState(true);
@@ -153,7 +153,7 @@ export default function Dashboard() {
                 <ListSubheader inset sx={listStyles.subheader}>
                   Teacher
                 </ListSubheader>
-                <ListItem button sx={listStyles.listItem}>
+                <ListItem button component={Link} to="/teacherdashboard" sx={listStyles.listItem}>
                   <ListItemIcon sx={listStyles.listItemIcon}>
                     <FontAwesomeIcon icon={faGrip} />
                   </ListItemIcon>
@@ -227,7 +227,7 @@ export default function Dashboard() {
          <ListSubheader inset sx={listStyles.subheader}>
                   Teacher
                 </ListSubheader>
-                <ListItem button sx={listStyles.listItem}>
+                <ListItem button component={Link} to="/teacherdashboard" sx={listStyles.listItem}>
                   <ListItemIcon sx={listStyles.listItemIcon}>
                     <FontAwesomeIcon icon={faGrip} />
                   </ListItemIcon>

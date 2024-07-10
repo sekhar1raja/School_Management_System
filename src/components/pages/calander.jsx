@@ -12,26 +12,31 @@ import { faUser, faChalkboardTeacher, faBullhorn, faCalendar } from '@fortawesom
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import CustomToolbar from "./customtoolbar";
 import '../pages/style.css';
+import { Link } from 'react-router-dom';
 
 const localizer = momentLocalizer(moment);
 
+
+
 function Cards() {
   const cardData = [
-    { icon: faUser, color: "#FF5733", text: "Student" },
-    { icon: faChalkboardTeacher, color: "#3399FF", text: "Teacher" },
-    { icon: faCalendar, color: "rgb(105 175 122)", text: "Event" },
-    { icon: faBullhorn, color: "rgb(96 102 161)", text: "Announcements" }
+    { icon: faUser, color: "#FF5733", text: "Student", link: "/adminstudentform" },
+    { icon: faChalkboardTeacher, color: "#3399FF", text: "Teacher", link: "/adminform" },
+    { icon: faCalendar, color: "rgb(105 175 122)", text: "Event", link: "/addEvent" },
+    { icon: faBullhorn, color: "rgb(96 102 161)", text: "Announcements", link: "/addAnnouncement" }
   ];
 
   return (
     <div className="cardcontainer">
       {cardData.map((card, index) => (
-        <div className="cardsec2" key={index}>
-          <div className="icon-container" style={{ color: card.color }}>
-            <FontAwesomeIcon icon={card.icon} className="icon" />
+        <Link to={card.link} key={index} className="card-link">
+          <div className="cardsec2">
+            <div className="icon-container" style={{ color: card.color }}>
+              <FontAwesomeIcon icon={card.icon} className="icon" />
+            </div>
+            <div className="textstyle">Add {card.text}</div>
           </div>
-          <div className="textstyle">Add {card.text}</div>
-        </div>
+        </Link>
       ))}
     </div>
   );

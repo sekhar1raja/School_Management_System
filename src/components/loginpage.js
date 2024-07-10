@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
+
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -14,6 +14,7 @@ import Dropdown from 'react-dropdown';
 import { useNavigate } from 'react-router-dom';
 import 'react-dropdown/style.css';  // Import styles for the dropdown
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import logo from './logo1.png';
 
 const defaultTheme = createTheme();
 
@@ -132,7 +133,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://res.cloudinary.com/dh1tomppe/image/upload/v1718041081/Group_1171275024_vadzwr.jpg)',
+            backgroundImage: 'url(https://images.unsplash.com/photo-1619512673224-91cfb2688284?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -150,9 +151,12 @@ export default function SignInSide() {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}></Avatar>
-            <Typography component="h1" variant="h5">
-              Sign in
+           <img src={logo} alt="Logo" />
+           
+            <Typography component="h1" variant="h5" sx={{
+              paddingTop:5,
+            }}>
+              Sign in with Your school Account
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
@@ -200,7 +204,7 @@ export default function SignInSide() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Sign In 
               </Button>
               {message && (
                 <Typography color="error" variant="body2">

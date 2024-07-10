@@ -9,6 +9,7 @@ import TeacherDashboard from './components/pages/Teacher/teacherdashboard';
 import TeacherDetails from './components/pages/Teacher/teacherdetails';
 import StudentDetailsForm from './components/pages/student/studentdetails'; 
 import AdminForm from './components/pages/Adminform';
+import Adminstudentform from './components/pages/AdminStudentform'
 import Events from './components/pages/Teacher/events';
 
 import Layout from './layout';
@@ -28,6 +29,7 @@ function App() {
           <Route path="teacherdashboard" element={<TeacherDashboard />} />
           <Route path="teacherDetails" element={<TeacherDetails />} />
           <Route path="adminform" element={<AdminForm />} />
+          <Route path="adminstudentform" element={<Adminstudentform />} />
           <Route path="events" element={<Events />} />
           {/* Add more routes as needed */}
         </Route>
