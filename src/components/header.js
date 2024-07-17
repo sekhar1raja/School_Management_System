@@ -18,11 +18,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
 
-// Import Material-UI icons
-import InboxIcon from '@mui/icons-material/Inbox';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import AssignmentIcon from '@mui/icons-material/Assignment'; // For Leave Request
-import AccountCircle from '@mui/icons-material/AccountCircle';
+
 
 const drawerWidth = 240;
 
@@ -98,6 +94,7 @@ export default function Dashboard() {
       alignItems: 'centre',
       textAlign: 'start',
       borderRadius: '10px',
+      color:'#828299',
       '&:hover': {
         background: 'rgba(218, 218, 255, 1)',
         color: 'Black',
@@ -105,8 +102,9 @@ export default function Dashboard() {
       },
     },
     listItemIcon: {
-      color: '#000000', 
+      color: '#828299', 
     },
+    
   };
 
   const handleLogout = () => {
@@ -161,11 +159,11 @@ export default function Dashboard() {
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItem>
-      <ListItem button sx={listStyles.listItem}>
+      <ListItem button component={Link} to="/assigncourse" sx={listStyles.listItem}>
         <ListItemIcon sx={listStyles.listItemIcon}>
           <span className="material-symbols-outlined">book</span>
         </ListItemIcon>
-        <ListItemText primary="Course Details" />
+        <ListItemText primary="Assign_Courses" />
       </ListItem>
       <ListItem button sx={listStyles.listItem}>
         <ListItemIcon sx={listStyles.listItemIcon}>
@@ -253,7 +251,7 @@ export default function Dashboard() {
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItem>
-      <ListItem button sx={listStyles.listItem}>
+      <ListItem button component={Link} to="/coursedetail" sx={listStyles.listItem}>
         <ListItemIcon sx={listStyles.listItemIcon}>
           <span className="material-symbols-outlined">book</span>
         </ListItemIcon>
@@ -283,7 +281,12 @@ export default function Dashboard() {
         </ListItemIcon>
         <ListItemText primary="Grade Profile" />
       </ListItem>
- 
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">logout</span>
+        </ListItemIcon>
+        <button onClick={handleLogout}>Logout</button>
+      </ListItem>
         </>
       );
     }
@@ -366,16 +369,16 @@ export default function Dashboard() {
             </IconButton>
             <Box sx={{ flexGrow: 1 }} />
             <IconButton >
-              <InboxIcon />
+          <span className="material-symbols-outlined">chat_bubble</span>
             </IconButton>
             <IconButton >
-              <NotificationsIcon />
+            <span className="material-symbols-outlined">mail</span>
             </IconButton>
             <IconButton >
-              <AssignmentIcon />
+            <span className="material-symbols-outlined">notification_important</span>
             </IconButton>
             <IconButton >
-              <AccountCircle />
+            <span className="material-symbols-outlined">account_circle</span>
             </IconButton>
           </Toolbar>
         </AppBar>
