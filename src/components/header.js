@@ -14,8 +14,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faChalkboardTeacher, faGraduationCap, faGrip, faUserGraduate, faChartLine, faBook, faClipboardUser, faTrophy, faSignOut } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
@@ -126,213 +124,219 @@ export default function Dashboard() {
     if (userRole === 1) {
       return (
         <>
-          <ListSubheader inset sx={listStyles.subheader}>
-            Admin
-          </ListSubheader>
-          <ListItem button component={Link} to="/Dashboard" sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faGrip} />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-          <ListItem button component={Link} to="/EmployeeDetails" sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faUser} />
-            </ListItemIcon>
-            <ListItemText primary="Employee Details" />
-          </ListItem>
-          <ListItem button component={Link} to="/studentdetails" sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faUserGraduate} />
-            </ListItemIcon>
-            <ListItemText primary="Student Details" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faChartLine} />
-            </ListItemIcon>
-            <ListItemText primary="Financial Management " />
-          </ListItem>
-          <Divider />
-          <ListSubheader inset sx={listStyles.subheader}>
-            Teacher
-          </ListSubheader>
-          <ListItem button component={Link} to="/teacherdashboard" sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faGrip} />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faBook} />
-            </ListItemIcon>
-            <ListItemText primary="Course Details" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faGraduationCap} />
-            </ListItemIcon>
-            <ListItemText primary="Semester Progress" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faChalkboardTeacher} />
-            </ListItemIcon>
-            <ListItemText primary="Student Details" />
-          </ListItem>
-          <ListItem button component={Link} to="/teacherDetails" sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faUser} />
-            </ListItemIcon>
-            <ListItemText primary="Profile" />
-          </ListItem>
-          <Divider />
-          <ListSubheader inset sx={listStyles.subheader}>
-            Student
-          </ListSubheader>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faGrip} />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faClipboardUser} />
-            </ListItemIcon>
-            <ListItemText primary="Attendance" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faTrophy} />
-            </ListItemIcon>
-            <ListItemText primary="Academics" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faGraduationCap} />
-            </ListItemIcon>
-            <ListItemText primary="Profile" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faSignOut} />
-            </ListItemIcon>
-            <button onClick={handleLogout}>Logout</button>
-          </ListItem>
+         <ListSubheader inset sx={listStyles.subheader}>
+        Admin
+      </ListSubheader>
+      <ListItem button component={Link} to="/Dashboard" sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">dashboard</span>
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+      </ListItem>
+      <ListItem button component={Link} to="/EmployeeDetails" sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">person</span>
+        </ListItemIcon>
+        <ListItemText primary="Employee Details" />
+      </ListItem>
+      <ListItem button component={Link} to="/studentdetails" sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">school</span>
+        </ListItemIcon>
+        <ListItemText primary="Student Details" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">bar_chart</span>
+        </ListItemIcon>
+        <ListItemText primary="Financial Management" />
+      </ListItem>
+      <Divider />
+      <ListSubheader inset sx={listStyles.subheader}>
+        Teacher
+      </ListSubheader>
+      <ListItem button component={Link} to="/teacherdashboard" sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">dashboard</span>
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">book</span>
+        </ListItemIcon>
+        <ListItemText primary="Course Details" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">co_present</span>
+        </ListItemIcon>
+        <ListItemText primary="Attendance" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">calendar_today</span>
+        </ListItemIcon>
+        <ListItemText primary="Calendar" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">assignment</span>
+        </ListItemIcon>
+        <ListItemText primary="Assignments" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">grading</span>
+        </ListItemIcon>
+        <ListItemText primary="Grade Profile" />
+      </ListItem>
+      <Divider />
+      <ListSubheader inset sx={listStyles.subheader}>
+        Student
+      </ListSubheader>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">dashboard</span>
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">co_present</span>
+        </ListItemIcon>
+        <ListItemText primary="Attendance" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">book</span>
+        </ListItemIcon>
+        <ListItemText primary="Course Details" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">calendar_today</span>
+        </ListItemIcon>
+        <ListItemText primary="Calendar" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">assignment</span>
+        </ListItemIcon>
+        <ListItemText primary="Assignments" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">school</span>
+        </ListItemIcon>
+        <ListItemText primary="Profile" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">logout</span>
+        </ListItemIcon>
+        <button onClick={handleLogout}>Logout</button>
+      </ListItem>
         </>
       );
     }
-    if (userRole === 2) {
-      return (
-        <>
-          <ListSubheader inset sx={listStyles.subheader}>
-            Teacher
-          </ListSubheader>
-          <ListItem button component={Link} to="/teacherdashboard" sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faGrip} />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faBook} />
-            </ListItemIcon>
-            <ListItemText primary="Course Details" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faGraduationCap} />
-            </ListItemIcon>
-            <ListItemText primary="Semester Progress" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faChalkboardTeacher} />
-            </ListItemIcon>
-            <ListItemText primary="Student Details" />
-          </ListItem>
-          <ListItem button component={Link} to="/teacherDetails" sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faUser} />
-            </ListItemIcon>
-            <ListItemText primary="Profile" />
-          </ListItem>
-          <Divider />
-          <ListSubheader inset sx={listStyles.subheader}>
-            Student
-          </ListSubheader>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faGrip} />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faClipboardUser} />
-            </ListItemIcon>
-            <ListItemText primary="Attendance" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faTrophy} />
-            </ListItemIcon>
-            <ListItemText primary="Academics" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faGraduationCap} />
-            </ListItemIcon>
-            <ListItemText primary="Profile" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faSignOut} />
-            </ListItemIcon>
-            <button onClick={handleLogout}>Logout</button>
-          </ListItem>
-        </>
-      );
-    }
+    //teacher//
     if (userRole === 3) {
       return (
         <>
           <ListSubheader inset sx={listStyles.subheader}>
-            Student
+            Teacher
           </ListSubheader>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faGrip} />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faClipboardUser} />
-            </ListItemIcon>
-            <ListItemText primary="Attendance" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faTrophy} />
-            </ListItemIcon>
-            <ListItemText primary="Academics" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faGraduationCap} />
-            </ListItemIcon>
-            <ListItemText primary="Profile" />
-          </ListItem>
-          <ListItem button sx={listStyles.listItem}>
-            <ListItemIcon sx={listStyles.listItemIcon}>
-              <FontAwesomeIcon icon={faSignOut} />
-            </ListItemIcon>
-            <button onClick={handleLogout}>Logout</button>
-          </ListItem>
+          <ListItem button component={Link} to="/teacherdashboard" sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">dashboard</span>
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">book</span>
+        </ListItemIcon>
+        <ListItemText primary="Course Details" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">co_present</span>
+        </ListItemIcon>
+        <ListItemText primary="Attendance" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">calendar_today</span>
+        </ListItemIcon>
+        <ListItemText primary="Calendar" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">assignment</span>
+        </ListItemIcon>
+        <ListItemText primary="Assignments" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">grading</span>
+        </ListItemIcon>
+        <ListItemText primary="Grade Profile" />
+      </ListItem>
+ 
+        </>
+      );
+    }
+    //user//
+    if (userRole === 2) {
+      return (
+        <>
+         <ListSubheader inset sx={listStyles.subheader}>
+        Student
+      </ListSubheader>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">dashboard</span>
+        </ListItemIcon>
+        <ListItemText primary="Dashboard" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">co_present</span>
+        </ListItemIcon>
+        <ListItemText primary="Attendance" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">book</span>
+        </ListItemIcon>
+        <ListItemText primary="Course Details" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">calendar_today</span>
+        </ListItemIcon>
+        <ListItemText primary="Calendar" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">assignment</span>
+        </ListItemIcon>
+        <ListItemText primary="Assignments" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">school</span>
+        </ListItemIcon>
+        <ListItemText primary="Profile" />
+      </ListItem>
+      <ListItem button sx={listStyles.listItem}>
+        <ListItemIcon sx={listStyles.listItemIcon}>
+          <span className="material-symbols-outlined">logout</span>
+        </ListItemIcon>
+        <button onClick={handleLogout}>Logout</button>
+      </ListItem>
+           
         </>
       );
     }
