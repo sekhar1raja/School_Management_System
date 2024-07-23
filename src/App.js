@@ -15,7 +15,8 @@ import AssignCoursetea from './components/pages/AssignCoursetea';
 import Coursedetails from './components/pages/Teacher/coursedetails';
 import Eventcalander from './components/pages/Teacher/eventcalander';
 import Attendance from './components/pages/Teacher/attendance';
-import Announcements from "./components/pages/Teacher/annocements"
+import Announcements from "./components/pages/Teacher/annocements";
+import AddEvent from './components/pages/addevent';
 import Layout from './layout';
 import './App.css';
 
@@ -36,11 +37,13 @@ function App() {
           <Route path="adminform" element={<AdminForm />} />
           <Route path="adminstudentform" element={<Adminstudentform />} />
           <Route path="events" element={<Events />} />
+          <Route path="/" element={<AddEvent />} />
           <Route path="assigncourse" element={<AssignCoursetea />} />
           <Route path="coursedetail" element={<Coursedetails/>} />
           <Route path="eventcalander" element={<Eventcalander/>} />
           <Route path="attendance" element={<Attendance/>} />
           <Route path="annocements" element={<Announcements/>} />
+          
           {/* Add more routes as needed */}
         </Route>
       </Routes>

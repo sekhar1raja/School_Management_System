@@ -113,6 +113,9 @@ body{
   .rbc-calander{
     width: 60%;
   }
+  .event-_Calander_teacher_dashoard{
+    width: 100% !important;
+  }
   
   .rbc-month-view{
     flex-basis: 500px !important;

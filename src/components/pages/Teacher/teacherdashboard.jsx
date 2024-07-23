@@ -59,7 +59,7 @@ function MyComponent() {
       </div>
       <div className="row">
         <div className="d-flex col-md-12">
-          <div className="col-md-8">
+          <div className="col-md-8 event-_Calander_teacher_dashoard">
             <Eventcalander />
           </div>
         </div>

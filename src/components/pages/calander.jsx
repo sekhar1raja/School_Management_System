@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { Calendar as BigCalendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import Dialog from "@mui/material/Dialog";
@@ -10,6 +10,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import CustomToolbar from "./customtoolbar";
 import '../pages/style.css';
 import { Link } from 'react-router-dom';
+import AddEvent from './addevent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faChalkboardTeacher, faBullhorn, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -17,25 +18,36 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 const localizer = momentLocalizer(moment);
 
 function Cards() {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const cardData = [
     { icon: faUser, color: "#white", text: "Student", link: "/adminstudentform" },
     { icon: faChalkboardTeacher, color: "#3399FF", text: "Teacher", link: "/adminform" },
-    { icon: faCalendar, color: "rgb(105 175 122)", text: "Event", link: "/addEvent" },
+    { icon: faCalendar, color: "rgb(105 175 122)", text: "Event", link: "#" }, // Change link to '#'
     { icon: faBullhorn, color: "rgb(96 102 161)", text: "Announcements", link: "/addAnnouncement" }
   ];
 
   return (
     <div className="cardcontainer">
       {cardData.map((card, index) => (
-        <Link to={card.link} key={index} className="card-link">
+        <div key={index} className="card-link" onClick={card.text === 'Event' ? handleClickOpen : undefined}>
           <div className="cardsec2">
             <div className="icon-container" style={{ color: card.color }}>
-              <FontAwesomeIcon icon={card.icon} className="icon" style={{fontSize:'24px'}} />
+              <FontAwesomeIcon icon={card.icon} className="icon" style={{ fontSize: '24px' }} />
             </div>
             <div className="textstyle">Add {card.text}</div>
           </div>
-        </Link>
+        </div>
       ))}
+      <AddEvent open={open} onClose={handleClose} />
     </div>
   );
 }
@@ -62,11 +74,13 @@ class Calendar extends Component {
 
   fetchEvents = async () => {
     try {
-      const response = await fetch('/api/events');
+      const response = await fetch('http://localhost:8080/util/event');
       const data = await response.json();
       // Convert date strings to Date objects
       const formattedEvents = data.map(event => ({
-        ...event,
+        id: event.id,
+        title: event.event,
+        description: event.description,
         start: new Date(event.date),
         end: new Date(event.date)
       }));
