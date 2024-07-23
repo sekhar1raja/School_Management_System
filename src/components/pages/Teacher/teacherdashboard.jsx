@@ -57,16 +57,41 @@ function MyComponent() {
           </div>
         </div>
       </div>
+      <div className="main-content">
+        <header className="main-header">
+          <div className="welcome-message">
+            <h1>Welcome to edusys,</h1>
+            <p>Professor Yicha We’re excited to have you join our academic community. Let’s get started with your teaching journey.</p>
+          </div>
+        </header>
+        <div className="content-grid">
+          <div className="calendar-section">
+         
+          </div>
+          <div className="actions-section">
+            <div className="action-item">Add Notes</div>
+            <div className="action-item">Add Assignments</div>
+            <div className="action-item">Announcement</div>
+            <div className="action-item">Calendar</div>
+          </div>
+        </div>
+        <div className="announcements">
+          <h2>Announcements</h2>
+          <ul>
+            <li>Announcement 1</li>
+            <li>Announcement 2</li>
+          </ul>
+        </div>
       <div className="row">
         <div className="d-flex col-md-12">
         <div className="col-md-6">
         <Events />
-        </div>
+          </div>
         <div className="col-md-6">
 
         </div>
+      </div>
         </div>
-        
       </div>
     </main>
   );
