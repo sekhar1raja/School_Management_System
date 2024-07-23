@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { Calendar as BigCalendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import Dialog from "@mui/material/Dialog";
@@ -7,37 +7,47 @@ import TextField from "@mui/material/TextField";
 import TimePicker from "@mui/lab/TimePicker";
 import AdapterMoment from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faChalkboardTeacher, faBullhorn, faCalendar } from '@fortawesome/free-solid-svg-icons';
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import CustomToolbar from "./customtoolbar";
 import '../pages/style.css';
 import { Link } from 'react-router-dom';
+import AddEvent from './addevent';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faChalkboardTeacher, faBullhorn, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const localizer = momentLocalizer(moment);
 
-
-
 function Cards() {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const cardData = [
-    { icon: faUser, color: "#FF5733", text: "Student", link: "/adminstudentform" },
+    { icon: faUser, color: "#white", text: "Student", link: "/adminstudentform" },
     { icon: faChalkboardTeacher, color: "#3399FF", text: "Teacher", link: "/adminform" },
-    { icon: faCalendar, color: "rgb(105 175 122)", text: "Event", link: "/addEvent" },
+    { icon: faCalendar, color: "rgb(105 175 122)", text: "Event", link: "#" }, // Change link to '#'
     { icon: faBullhorn, color: "rgb(96 102 161)", text: "Announcements", link: "/addAnnouncement" }
   ];
 
   return (
     <div className="cardcontainer">
       {cardData.map((card, index) => (
-        <Link to={card.link} key={index} className="card-link">
+        <div key={index} className="card-link" onClick={card.text === 'Event' ? handleClickOpen : undefined}>
           <div className="cardsec2">
             <div className="icon-container" style={{ color: card.color }}>
-              <FontAwesomeIcon icon={card.icon} className="icon" />
+              <FontAwesomeIcon icon={card.icon} className="icon" style={{ fontSize: '24px' }} />
             </div>
             <div className="textstyle">Add {card.text}</div>
           </div>
-        </Link>
+        </div>
       ))}
+      <AddEvent open={open} onClose={handleClose} />
     </div>
   );
 }
@@ -58,11 +68,33 @@ class Calendar extends Component {
     this.handleClose = this.handleClose.bind(this);
   }
 
+  componentDidMount() {
+    this.fetchEvents();
+  }
+
+  fetchEvents = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/util/event');
+      const data = await response.json();
+      // Convert date strings to Date objects
+      const formattedEvents = data.map(event => ({
+        id: event.id,
+        title: event.event,
+        description: event.description,
+        start: new Date(event.date),
+        end: new Date(event.date)
+      }));
+      this.setState({ events: formattedEvents });
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
+
   handleClose() {
     this.setState({ openEvent: false, openSlot: false });
   }
 
-  handleSlotSelected(slotInfo) {
+  handleSlotSelected = (slotInfo) => {
     this.setState({
       title: "",
       desc: "",
@@ -72,7 +104,7 @@ class Calendar extends Component {
     });
   }
 
-  handleEventSelected(event) {
+  handleEventSelected = (event) => {
     this.setState({
       openEvent: true,
       clickedEvent: event,
@@ -83,23 +115,23 @@ class Calendar extends Component {
     });
   }
 
-  setTitle(e) {
+  setTitle = (e) => {
     this.setState({ title: e });
   }
 
-  setDescription(e) {
+  setDescription = (e) => {
     this.setState({ desc: e });
   }
 
   handleStartTime = (date) => {
     this.setState({ start: date });
-  };
+  }
 
   handleEndTime = (date) => {
     this.setState({ end: date });
-  };
+  }
 
-  setNewAppointment() {
+  setNewAppointment = () => {
     const { start, end, title, desc } = this.state;
     let appointment = { title, start, end, desc };
     let events = this.state.events.slice();
@@ -107,7 +139,7 @@ class Calendar extends Component {
     this.setState({ events });
   }
 
-  updateEvent() {
+  updateEvent = () => {
     const { title, desc, start, end, events, clickedEvent } = this.state;
     const index = events.findIndex(event => event === clickedEvent);
     const updatedEvent = events.slice();
@@ -120,9 +152,9 @@ class Calendar extends Component {
     });
   }
 
-  deleteEvent() {
+  deleteEvent = () => {
     let updatedEvents = this.state.events.filter(
-      event => event["start"] !== this.state.start
+      event => event.start.toISOString() !== this.state.start.toISOString()
     );
     this.setState({ events: updatedEvents });
   }
@@ -186,6 +218,7 @@ class Calendar extends Component {
     return (
       <div className="flex-container">
         <div className="calendar-container" style={{ width: "60%" }}>
+          <h1>Event Calendar</h1>
           <BigCalendar
             localizer={localizer}
             events={this.state.events}
@@ -250,7 +283,7 @@ class Calendar extends Component {
             aria-labelledby="form-dialog-title"
           >
             <div className="dialog-content">
-              <h2>View/Edit Appointment of {moment(this.state.start).format("MMMM Do YYYY")}</h2>
+              <h2>View/Edit Event of {moment(this.state.start).format("MMMM Do YYYY")}</h2>
               <div className="dialog-actions">{eventActions}</div>
               <TextField
                 label="Title"
@@ -289,7 +322,7 @@ class Calendar extends Component {
           </Dialog>
         </div>
         
-        <div style={{ width: "40%" }}>
+        <div style={{ width: "30%" }}>
           <Cards />
         </div>
       </div>

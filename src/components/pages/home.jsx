@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import '../pages/style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserGraduate, faUser, faGift } from '@fortawesome/free-solid-svg-icons';
+import { faGraduationCap, faGift, faUserTie } from '@fortawesome/free-solid-svg-icons';
 import Calander from "./calander";
 
 function Grid({ totalStudents, totalTeachers, totalHolidays }) {
   return (
     <div className="container">
       <div className="row">
-        <Card title={totalStudents} description="Total Students" icon={faUserGraduate} cardClass="icon-1" />
-        <Card title={totalTeachers} description="Total Teachers" icon={faUser} cardClass="icon-2" />
+        <Card title={totalStudents} description="Total Students" icon={ faGraduationCap} cardClass="icon-1" />
+        <Card title={totalTeachers} description="Total Teachers" icon={faUserTie} cardClass="icon-2" />
         <Card title={totalHolidays} description="Total Holidays" icon={faGift} cardClass="icon-3" />
       </div>
     </div>
@@ -23,9 +23,9 @@ function Card({ title, description, icon, cardClass }) {
       <div className="card">
         <div className="card-body">
           <FontAwesomeIcon icon={icon} size="2x" className="mb-3 icon-wrapper" />
-          <div>
-            <h3 className="card-title">{title}</h3>
+          <div className="carddata">
             <p className="card-text">{description}</p>
+            <h3 className="card-title">{title}</h3>
           </div>
         </div>
       </div>
@@ -70,7 +70,7 @@ function App() {
       <main>
         <Grid totalStudents={totalStudents} totalTeachers={totalTeachers} totalHolidays={totalHolidays} />
         <Calander />
-        {/* <MoreCards /> */}
+    
       </main>
     </div>
   );

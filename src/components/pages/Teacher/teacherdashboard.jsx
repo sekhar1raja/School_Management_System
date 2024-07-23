@@ -1,6 +1,6 @@
 import * as React from "react";
-import Events from "./events";
-import "../style.css";
+import Eventcalander from "./eventcalander";
+import "../style.css"; // Make sure to include your stylesheet
 
 function MyComponent() {
   return (
@@ -84,14 +84,11 @@ function MyComponent() {
         </div>
       <div className="row">
         <div className="d-flex col-md-12">
-        <div className="col-md-6">
-        <Events />
+          <div className="col-md-8 event-_Calander_teacher_dashoard">
+            <Eventcalander />
           </div>
-        <div className="col-md-6">
-
         </div>
       </div>
-        </div>
       </div>
     </main>
   );
