@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Card, CardContent, Typography, Box } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, Typography, Box, Grid } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import axios from 'axios';
 
 // Example functional component to render tab content
 const TabPanel = ({ children, value, index, ...other }) => {
@@ -24,6 +25,34 @@ const TabPanel = ({ children, value, index, ...other }) => {
 
 const Coursedetails = () => {
   const [value, setValue] = useState(0);
+  const [currentCourses, setCurrentCourses] = useState([]);
+  const [pastCourses, setPastCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      setLoading(true);
+      const teacherId = JSON.parse(localStorage.getItem('user'))?.teacherId;
+
+      if (teacherId) {
+        try {
+          const response = await axios.get('http://localhost:8080/util/course', {
+            params: { teacherId } 
+          });
+
+          // Assuming the response contains separate arrays for current and past courses
+          setCurrentCourses(response.data.currentCourses || []);
+          setPastCourses(response.data.pastCourses || []);
+        } catch (error) {
+          console.error('Error fetching course details:', error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -56,12 +85,47 @@ const Coursedetails = () => {
       </Box>
 
       <TabPanel value={value} index={0}>
-        Current Courses
+        {loading ? (
+          <Typography>Loading...</Typography>
+        ) : (
+          <Grid container spacing={3}>
+            {currentCourses.map((course) => (
+              <Grid item xs={12} sm={6} md={4} key={course.courseId}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6">{course.courseName}</Typography>
+                    <Typography variant="body2">Section: {course.sectionName}</Typography>
+                    <Typography variant="body2">Course ID: {course.courseId}</Typography>
+                    <Typography variant="body2">Section ID: {course.sectionId}</Typography>
+                    <Typography variant="body2">Offered ID: {course.courseOfferedId}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        )}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Past Courses
+        {loading ? (
+          <Typography>Loading...</Typography>
+        ) : (
+          <Grid container spacing={3}>
+            {pastCourses.map((course) => (
+              <Grid item xs={12} sm={6} md={4} key={course.courseId}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6">{course.courseName}</Typography>
+                    <Typography variant="body2">Section: {course.sectionName}</Typography>
+                    <Typography variant="body2">Course ID: {course.courseId}</Typography>
+                    <Typography variant="body2">Section ID: {course.sectionId}</Typography>
+                    <Typography variant="body2">Offered ID: {course.courseOfferedId}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        )}
       </TabPanel>
-
     </div>
   );
 };

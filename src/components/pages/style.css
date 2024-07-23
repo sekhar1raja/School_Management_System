@@ -60,33 +60,40 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-around;
+    /* color: white; */
+    background:#dadaff;
   }
   
   .icon-wrapper {
   
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 32px;
+    height: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
-
+    background-color: white;
+    color: #5d5dff;
+    padding: 20px;
     
     }
 
   .row .icon-1 .card {
-
-    color:#6F83CA;
+    background: #dadaff;
+    color:white;
+  }
+  .carddata{
+    text-align: justify;
   }
 
   .row .icon-2 .card {
-
-    color:#FF7555;
+    background: #dadaff;
+    color:whitesmoke;
   }
 
   .row .icon-3 .card {
-
-    color:#F7871B;
+    background: #dadaff;
+    color:white;
   }
 
   
@@ -149,6 +156,8 @@ body{
   display: flex;
   width: 100%;
   margin-top: 25px;
+  justify-content: space-around;
+  align-items: center;
   
 }
 
@@ -172,6 +181,52 @@ body{
   font-size: 45px;
 }
 
+.btn-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.icon-button {
+  color: #000; /* Adjust color as needed */
+  margin: 0 0.5rem;
+  border-radius: 50%; /* Rounded buttons */
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
+  box-shadow: none; /* No shadow */
+}
+
+.icon-button:hover {
+  background-color: #a0afe7;  /* Light hover effect */
+}
+
+.rbc-toolbar-label {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 0 1rem;
+}
+
+.rbc-btn-group button {
+  color: #000; /* Adjust color as needed */
+  margin: 0 0.5rem;
+  border: 1px solid #ccc; /* Border around buttons */
+  border-radius: 50px; /* Rounded buttons */
+  padding: 0.5rem 1rem;
+  background-color: transparent; /* No background color */
+  cursor: pointer;
+}
+
+.rbc-btn-group button:hover {
+  background-color: #a0afe7; /* Light hover effect */
+}
+
+.rbc-btn-group button:active {
+  background-color:#feffff;  /* Slightly darker on active */
+}
+
+
 .cardsec2 {
     box-sizing: border-box;
     z-index: 1;
@@ -184,6 +239,7 @@ body{
     padding: 25px;
     margin-bottom: 14px;
     cursor: pointer;
+    background-color: #94a9f5;
  
 }
 .cardsec2:hover{
@@ -206,129 +262,78 @@ body{
   margin-left: 10px;
 }
 /*Teacher Dashboard*/
-   
-.ag-courses_box {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: start;
-  -ms-flex-align: start;
-  align-items: flex-start;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
+ /* Add this CSS to your stylesheet */
 
-  padding: 50px 0;
+.ag-courses_box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
 }
+
 .ag-courses_item {
-  -ms-flex-preferred-size: calc(33.33333% - 30px);
-  flex-basis: calc(33.33333% - 30px);
-  margin: 0 15px 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
   overflow: hidden;
+  text-align: center;
+  flex: 1 1 calc(33.333% - 16px);
 }
+
+.ag-courses_item:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+}
+
 .ag-courses-item_link {
   display: block;
-  padding: 30px 20px;
-  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
-  background-color: rgb(233 233 233 / 45%);
-  overflow: hidden;
-  position: relative;
-}
-.ag-courses-item_link:hover,
-.ag-courses-item_link:hover .ag-courses-item_date {
   text-decoration: none;
-  color: #FFF;
+  color: inherit;
 }
-.ag-courses-item_link:hover .ag-courses-item_bg {
-  -webkit-transform: scale(10);
-  -ms-transform: scale(10);
-  transform: scale(10);
-}
-.ag-courses-item_title {
-  min-height: 87px;
-  margin: 0 0 25px;
 
-  overflow: hidden;
-
-  font-weight: bold;
-  font-size: 30px;
-  color: #FFF;
-
-  z-index: 2;
-  position: relative;
-}
-.ag-courses-item_date-box {
-  font-size: 18px;
-  color: #FFF;
-
-  z-index: 2;
-  position: relative;
-}
-.ag-courses-item_date {
-  font-weight: bold;
-  color: #f9b234;
-
-  -webkit-transition: color .5s ease;
-  -o-transition: color .5s ease;
-  transition: color .5s ease
-}
 .ag-courses-item_bg {
-  height: 128px;
-  width: 128px;
-  background-color: #f9b234;
+  background: #f0f0f0;
+  height: 0px;
+  width: 100%;
+}
 
-  z-index: 1;
-  position: absolute;
-  top: -75px;
-  right: -75px;
+.ag-courses-item_title {
+  padding: 16px;
+}
 
+.ag-courses-item_title img {
   border-radius: 50%;
-
-  -webkit-transition: all .5s ease;
-  -o-transition: all .5s ease;
-  transition: all .5s ease;
-}
-.ag-courses_item:nth-child(2n) .ag-courses-item_bg {
-  background-color: #3ecd5e;
-}
-.ag-courses_item:nth-child(3n) .ag-courses-item_bg {
-  background-color: #e44002;
-}
-.ag-courses_item:nth-child(4n) .ag-courses-item_bg {
-  background-color: #952aff;
 }
 
-@media only screen and (max-width: 979px) {
-  .ag-courses_item {
-    -ms-flex-preferred-size: calc(50% - 30px);
-    flex-basis: calc(50% - 30px);
-  }
-  .ag-courses-item_title {
-    font-size: 24px;
-  }
+.ag-courses-item_date-box {
+  padding: 16px;
+  background: #f7f9fc;
 }
 
-@media only screen and (max-width: 767px) {
-  .ag-format-container {
-    width: 96%;
-  }
-
+.ag-courses-item_date {
+  font-size: 16px;
+  font-weight: 600;
 }
-@media only screen and (max-width: 639px) {
-  .ag-courses_item {
-    -ms-flex-preferred-size: 100%;
-    flex-basis: 100%;
-  }
-  .ag-courses-item_title {
-    min-height: 72px;
-    line-height: 1;
 
-    font-size: 24px;
-  }
-  .ag-courses-item_link {
-    padding: 22px 40px;
-  }
-  .ag-courses-item_date-box {
-    font-size: 16px;
-  }
+/* Announcement Card Styles */
+.announcement-card {
+  background: #e0f7fa;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  color: #00796b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
+
+.announcement-card h3 {
+  margin: 0 0 8px 0;
+}
+
+.announcement-card p {
+  margin: 0;
+}
+
 /* teacherdetails*/

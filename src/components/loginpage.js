@@ -93,29 +93,19 @@ export default function SignInSide() {
         },
         body: JSON.stringify(userData),
       });
-
+    
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.statusText}`);
       }
-
+    
       const result = await response.json();
       console.log(result.roles);
-
+    
       // Store user role in local storage
       localStorage.setItem('userRole', result.roles.id);
-
-      if (result.roles.id === 1) {
-        setMessage('Admin login successful');
-      } else if (result.roles.id === 2) {
-        setMessage('Student login successful');
-      } else if (result.roles.id === 3) {
-        setMessage('Teacher login successful');
-      } else {
-        setMessage('Unknown role');
-      }
-
+      console.log(localStorage);
       navigate("/dashboard");
-
+    
       console.log(result);
     } catch (error) {
       console.error('There was a problem with your fetch operation:', error);
