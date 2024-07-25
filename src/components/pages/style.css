@@ -1,11 +1,12 @@
 /* App.css */
 
 body{
-  background-color: white;
+  background-color: transparent;
 }
 .App {
     text-align: center;
   }
+
   
   .App-header  h1{  
    color:#aeaeae;
@@ -131,9 +132,6 @@ body{
     color: rgb(15, 114, 226);
   }
   
-  .rbc-today {
-    background-color: rgb(196, 226, 250) !important;
-  }
   
   @media (max-width: 480px) {
     .rbc-toolbar {
@@ -340,3 +338,58 @@ body{
 }
 
 /* teacherdetails*/
+.assignment-card {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.assignment-card .MuiCardContent-root {
+  padding: 16px;
+}
+
+.assignment-card .MuiTextField-root {
+  margin-bottom: 16px;
+}
+
+.assignment-card .MuiFormControl-root {
+  margin-bottom: 16px;
+}
+.calandertitle{
+  background-color:#5d5dff;padding:10px;border-radius:5px;
+}
+/* course details */
+.card-block {
+  font-size: 1em;
+  position: relative;
+  margin: 0;
+  padding: 1em;
+  border: none;
+  border-top: 1px solid rgba(34, 36, 38, 0.1);
+  box-shadow: none;
+}
+
+.card {
+  font-size: 1em;
+  overflow: hidden;
+  padding: 5px;
+  border: none;
+  border-radius: 0.28571429rem;
+  box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+  margin-top: 20px;
+}
+
+.course-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.course-card:hover {
+  transform: scale(1.05);
+}
+
+.course-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}

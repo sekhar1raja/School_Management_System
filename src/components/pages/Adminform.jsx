@@ -104,7 +104,7 @@ function RegistrationPage() {
         postal_code: "",
         country: "",
         experience: "",
-
+  
         professorPosition: {
           positionId: "",
         },

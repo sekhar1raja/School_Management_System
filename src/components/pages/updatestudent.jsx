@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function RegistrationPage() {
+function RegistrationPages() {
+  const { userId } = useParams(); // Get the user ID from the URL parameters
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -11,9 +13,7 @@ function RegistrationPage() {
     fatherName: "",
     motherName: "",
     alternateNumber: "",
-    roles: {
-      id: "",
-    },
+    roles: { id: "" },
     contactNumber: "",
     address1: "",
     address2: "",
@@ -21,39 +21,37 @@ function RegistrationPage() {
     state: "",
     postal_code: "",
     country: "",
-    classTable: {
-      classId: "",
+    section: { sectionId: "" },
+    
+    coursesOffered: {
+        courseOfferedId: ""
     },
-    section: {
-      sectionId: "",
-    },
-    coursesOffered: "",
     fees: "",
+    semester:"",
   });
 
-  const [classTable, setClassTable] = useState([]);
   const [sections, setSections] = useState([]);
   const [courses, setCourses] = useState([]);
 
-  // Fetch Classes
   useEffect(() => {
-    const fetchClass = async () => {
-      try {
-        const response = await fetch("http://localhost:8080/util/class");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+    if (userId) {
+      const fetchUserData = async () => {
+        try {
+          const response = await fetch(`http://localhost:8080/user/individualUser?userId=${userId}`);
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          setFormData(data);
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
         }
-        const data = await response.json();
-        setClassTable(data);
-      } catch (error) {
-        console.error("Failed to fetch Class:", error);
-      }
-    };
+      };
+      fetchUserData();
+    }
+  }, [userId]);
+  
 
-    fetchClass();
-  }, []);
-
-  // Fetch Sections
   useEffect(() => {
     const fetchSection = async () => {
       try {
@@ -67,11 +65,9 @@ function RegistrationPage() {
         console.error("Failed to fetch section:", error);
       }
     };
-
     fetchSection();
   }, []);
 
-  // Fetch Courses
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -85,14 +81,12 @@ function RegistrationPage() {
         console.error("Failed to fetch courses:", error);
       }
     };
-
     fetchCourses();
   }, []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-
-    // To handle nested state updates correctly
+  
     if (name.includes(".")) {
       const [outer, inner] = name.split(".");
       setFormData((prevState) => ({
@@ -106,67 +100,47 @@ function RegistrationPage() {
       setFormData({ ...formData, [name]: value });
     }
   };
+  
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const url = "http://localhost:8080/user/user";
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+ const handleSubmit = async (event) => {
+  event.preventDefault();
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok.");
-      }
+  // Assuming formData is populated correctly
 
-      const data = await response.json();
-      console.log("Success:", data);
 
-      // Clear form after successful submission
-      setFormData({
-        firstName: "",
-        lastName: "",
-        password: "",
-        email: "",
-        gender: "",
-        fatherName: "",
-        motherName: "",
-        alternateNumber: "",
-        roles: {
-          id: "",
-        },
-        contactNumber: "",
-        address1: "",
-        address2: "",
-        city: "",
-        state: "",
-        postal_code: "",
-        country: "",
-        classTable: {
-          classId: "",
-        },
-        section: {
-          sectionId: "",
-        },
-        coursesOffered: "",
-        fees: "",
-      });
-    } catch (error) {
-      console.error("Error:", error);
+  const url = `http://localhost:8080/user/user`;
+
+  try {
+    const response = await fetch(url, {
+      method: "PUT",
+      mode: 'cors',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok.");
     }
-  };
+
+    const data = await response.json();
+    console.log("Success:", data);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
 
   return (
+    
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-lg-12">
           <div className="card shadow-lg p-3 mb-5 bg-white rounded">
             <div className="mb-4">
-              <h4 style={{ color: "#525F7F" }}>Add Student</h4>
+              <h4 style={{ color: "#525F7F" }}>Update Student</h4>
+              <p>ID: {userId}</p>
             </div>
 
             <div className="">
@@ -195,7 +169,7 @@ function RegistrationPage() {
                           name="firstName"
                           value={formData.firstName}
                           onChange={handleChange}
-                          required
+                          r
                         />
                         <div className="invalid-feedback">
                           Please provide a first name.
@@ -217,7 +191,7 @@ function RegistrationPage() {
                           name="lastName"
                           value={formData.lastName}
                           onChange={handleChange}
-                          required
+                          
                         />
                         <div className="invalid-feedback">
                           Please provide a last name.
@@ -239,7 +213,7 @@ function RegistrationPage() {
                           name="password"
                           value={formData.password}
                           onChange={handleChange}
-                          required
+                          
                         />
                         <div className="invalid-feedback">
                           Please provide a password.
@@ -261,7 +235,7 @@ function RegistrationPage() {
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
-                          required
+                          
                         />
                         <div className="invalid-feedback">
                           Please provide an email.
@@ -276,17 +250,16 @@ function RegistrationPage() {
                           Roles
                         </label>
                         <select
-                          className="form-control shadow-sm"
-                          id="roles.id"
-                          name="roles.id"
-                          value={formData.roles.id}
-                          onChange={handleChange}
-                          required
-                        >
-                          <option value="">Select Role</option>
-                          <option value="3">Teacher</option>
-                          <option value="2">Student</option>
-                        </select>
+  className="form-control shadow-sm"
+  id="roles.id"
+  name="roles.id"
+  value={formData.roles ? formData.roles.id : ""}
+  onChange={handleChange}
+>
+  <option value="">Select Role</option>
+  <option value="3">Teacher</option>
+  <option value="2">Student</option>
+</select>
                         <div className="invalid-feedback">
                           Please select a role.
                         </div>
@@ -306,7 +279,7 @@ function RegistrationPage() {
                           name="gender"
                           value={formData.gender}
                           onChange={handleChange}
-                          required
+                          
                         >
                           <option value="">Select Gender</option>
                           <option value="male">Male</option>
@@ -333,7 +306,7 @@ function RegistrationPage() {
                           name="fatherName"
                           value={formData.fatherName}
                           onChange={handleChange}
-                          required
+                          
                         />
                         <div className="invalid-feedback">
                           Please provide a father name.
@@ -355,7 +328,7 @@ function RegistrationPage() {
                           name="motherName"
                           value={formData.motherName}
                           onChange={handleChange}
-                          required
+                          
                         />
                         <div className="invalid-feedback">
                           Please provide a mother name.
@@ -377,7 +350,7 @@ function RegistrationPage() {
                           name="alternateNumber"
                           value={formData.alternateNumber}
                           onChange={handleChange}
-                          required
+                          
                         />
                         <div className="invalid-feedback">
                           Please provide an alternate number.
@@ -402,7 +375,7 @@ function RegistrationPage() {
                             name="contactNumber"
                             value={formData.contactNumber}
                             onChange={handleChange}
-                            required
+                            
                           />
                           <div className="invalid-feedback">
                             Please provide a contact number.
@@ -424,7 +397,7 @@ function RegistrationPage() {
                             name="address1"
                             value={formData.address1}
                             onChange={handleChange}
-                            required
+                            
                           />
                           <div className="invalid-feedback">
                             Please provide address 1.
@@ -446,7 +419,7 @@ function RegistrationPage() {
                             name="address2"
                             value={formData.address2}
                             onChange={handleChange}
-                            required
+                            
                           />
                           <div className="invalid-feedback">
                             Please provide address 2.
@@ -468,7 +441,7 @@ function RegistrationPage() {
                             name="city"
                             value={formData.city}
                             onChange={handleChange}
-                            required
+                            
                           />
                           <div className="invalid-feedback">
                             Please provide a city.
@@ -490,7 +463,7 @@ function RegistrationPage() {
                             name="state"
                             value={formData.state}
                             onChange={handleChange}
-                            required
+                            
                           />
                           <div className="invalid-feedback">
                             Please provide a state.
@@ -512,7 +485,7 @@ function RegistrationPage() {
                             name="postal_code"
                             value={formData.postal_code}
                             onChange={handleChange}
-                            required
+                            
                           />
                           <div className="invalid-feedback">
                             Please provide a postal code.
@@ -534,7 +507,7 @@ function RegistrationPage() {
                             name="country"
                             value={formData.country}
                             onChange={handleChange}
-                            required
+                            
                           />
                           <div className="invalid-feedback">
                             Please provide a country.
@@ -557,7 +530,7 @@ function RegistrationPage() {
                         name="classTable.classId"
                         value={formData.classTable.classId}
                         onChange={handleChange}
-                        required
+                        
                       >
                         <option value="">Select Class</option>
                         {classTable.map((classItem) => (
@@ -580,20 +553,19 @@ function RegistrationPage() {
                         Section
                       </label>
                       <select
-                        className="form-control shadow-sm"
-                        id="section.sectionId"
-                        name="section.sectionId"
-                        value={formData.section.sectionId}
-                        onChange={handleChange}
-                        required
-                      >
-                        <option value="">Select Section</option>
-                        {sections.map((section) => (
-                          <option key={section.sectionId} value={section.sectionId}>
-                            {section.section}
-                          </option>
-                        ))}
-                      </select>
+  className="form-control shadow-sm"
+  id="section.sectionId"
+  name="section.sectionId"
+  value={formData.section ? formData.section.sectionId : ""}
+  onChange={handleChange}
+>
+  <option value="">Select Section</option>
+  {sections.map((section) => (
+    <option key={section.sectionId} value={section.sectionId}>
+      {section.section}
+    </option>
+  ))}
+</select>
                       <div className="invalid-feedback">
                         Please select a section.
                       </div>
@@ -609,21 +581,43 @@ function RegistrationPage() {
                       </label>
                       <select
                         className="form-control shadow-sm"
-                        id="coursesOffered"
-                        name="coursesOffered"
-                        value={formData.coursesOffered}
+                        id="coursesOffered.courseOfferedId"
+                        name="coursesOffered.courseOfferedId"
+                        value={formData.coursesOffered ? formData.coursesOffered.courseOfferedId:""}
+
                         onChange={handleChange}
-                        required
+                        
                       >
                         <option value="">Select Course</option>
                         {courses.map((course) => (
-                          <option key={course.courseId} value={course.courseId}>
+                          <option key={course.courseOfferedId} value={course.courseOfferedId}>
                             {course.courseName}
                           </option>
                         ))}
                       </select>
                       <div className="invalid-feedback">
                         Please select a course.
+                      </div>
+                    </div>
+                    <div className="mb-3">
+                      <label
+                        htmlFor="fees"
+                        className="form-label d-flex"
+                        style={{ color: "#525F7F", fontWeight: "bold" }}
+                      >
+                        semester
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control shadow-sm"
+                        id="currentSemester"
+                        name="currentSemester"
+                        value={formData.semester}
+                        onChange={handleChange}
+                        
+                      />
+                      <div className="invalid-feedback">
+                        Please provide the semester.
                       </div>
                     </div>
 
@@ -642,7 +636,7 @@ function RegistrationPage() {
                         name="fees"
                         value={formData.fees}
                         onChange={handleChange}
-                        required
+                        
                       />
                       <div className="invalid-feedback">
                         Please provide the fees.
@@ -660,7 +654,9 @@ function RegistrationPage() {
         </div>
       </div>
     </div>
+    
   );
+  
 }
 
-export default RegistrationPage;
+export default RegistrationPages;

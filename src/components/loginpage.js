@@ -103,6 +103,10 @@ export default function SignInSide() {
     
       // Store user role in local storage
       localStorage.setItem('userRole', result.roles.id);
+      localStorage.setItem('userId', result.userid);
+      localStorage.setItem('firstName', result.firstName);
+      localStorage.setItem('CourseId', result.coursesOffered.courseOfferedId);
+      
       console.log(localStorage);
       navigate("/dashboard");
     

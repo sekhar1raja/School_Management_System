@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faChalkboardTeacher, faBullhorn, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
+
 const localizer = momentLocalizer(moment);
 
 function Cards() {
@@ -283,7 +284,7 @@ class Calendar extends Component {
             aria-labelledby="form-dialog-title"
           >
             <div className="dialog-content">
-              <h2>View/Edit Event of {moment(this.state.start).format("MMMM Do YYYY")}</h2>
+              <h4 className="calandertitle">View/Edit Event of {moment(this.state.start).format("MMMM Do YYYY")}</h4>
               <div className="dialog-actions">{eventActions}</div>
               <TextField
                 label="Title"

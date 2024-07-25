@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Tooltip from '@mui/material/Tooltip';
 import { Link } from 'react-router-dom';
 import { Edit, Delete } from '@mui/icons-material';
-import Tooltip from '@mui/material/Tooltip';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -14,11 +14,17 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 const columns = (handleDelete) => [
     { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'firstName', headerName: 'First name', width: 130 },
-    { field: 'lastName', headerName: 'Last name', width: 130 },
-    { field: 'section', headerName: 'Section', flex: 1 },
+    { field: 'firstName', headerName: 'First Name', width: 130 },
+    { field: 'lastName', headerName: 'Last Name', width: 130 },
     { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'phoneNumber', headerName: 'Phone Number', type: 'number', width: 130 },
+    { field: 'contactNumber', headerName: 'Contact Number', width: 160 },
+    { field: 'address1', headerName: 'Address 1', width: 200 },
+    { field: 'city', headerName: 'City', width: 130 },
+    { field: 'state', headerName: 'State', width: 130 },
+    { field: 'country', headerName: 'Country', width: 130 },
+    { field: 'postal_code', headerName: 'Postal Code', width: 130 },
+    { field: 'gender', headerName: 'Gender', width: 130 },
+    { field: 'registrationTime', headerName: 'Registration Time', width: 200 },
     { field: 'aboutMe', headerName: 'About Me', width: 200 },
     { field: 'fees', headerName: 'Fees', width: 130 },
     {
@@ -28,7 +34,7 @@ const columns = (handleDelete) => [
         renderCell: (params) => (
             <div>
                 <Tooltip title="Edit Student">
-                    <Link to={`/edit-student/${params.row.id}`}>
+                    <Link to={`/updatestudent/${params.row.id}`}>
                         <Edit color="primary" />
                     </Link>
                 </Tooltip>
@@ -47,26 +53,31 @@ const columns = (handleDelete) => [
 export default function StudentTable() {
     const [rows, setRows] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [error, setError] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [currentId, setCurrentId] = useState(null);
-    const [error, setError] = useState(null); // State to hold error messages
 
     useEffect(() => {
         fetchData();
     }, []);
 
     const fetchData = () => {
-        axios.get('http://localhost:8080/user/user?roleId=2')
+        axios.get('http://localhost:8080/user/user?roleId=3')
             .then(response => {
-                console.log('API Response:', response); // Debug: check response data
                 if (response.data && Array.isArray(response.data)) {
                     const users = response.data.map(user => ({
                         id: user.userid || 'N/A',
                         firstName: user.firstName || 'N/A',
                         lastName: user.lastName || 'N/A',
                         email: user.email || 'N/A',
-                        section: user.section ? user.section.sectionId.toString() : 'N/A',
-                        phoneNumber: user.phoneNumber ? user.phoneNumber.toString() : 'N/A',
+                        contactNumber: user.contactNumber ? user.contactNumber.toString() : 'N/A',
+                        address1: user.address1 || 'N/A',
+                        city: user.city || 'N/A',
+                        state: user.state || 'N/A',
+                        country: user.country || 'N/A',
+                        postal_code: user.postal_code || 'N/A',
+                        gender: user.gender || 'N/A',
+                        registrationTime: user.registrationTime || 'N/A',
                         aboutMe: user.aboutMe || 'N/A',
                         fees: user.fees ? user.fees.toString() : 'N/A'
                     }));
@@ -76,7 +87,6 @@ export default function StudentTable() {
                 }
             })
             .catch(err => {
-                console.error('Error fetching user data:', err);
                 setError(`Error fetching data: ${err.message}`);
             });
     };
@@ -93,11 +103,11 @@ export default function StudentTable() {
                 setOpenDialog(false);
             })
             .catch(err => {
-                console.error('Error deleting user:', err);
                 setError(`Error deleting user: ${err.message}`);
                 setOpenDialog(false);
             });
     };
+
     const handleSearch = () => {
         const filteredRows = rows.filter(row =>
             Object.values(row).some(value =>
@@ -124,25 +134,31 @@ export default function StudentTable() {
                         Search
                     </Button>
                     <Tooltip title="Add Student">
-                        <Link to="/adminstudentform"> {/* Adjust the route to your admin form */}
+                        <Link to="/adminform">
                             <Edit fontSize="large" color="primary" />
                         </Link>
                     </Tooltip>
                 </div>
             </div>
+            {error && <div className="alert alert-danger">{error}</div>}
             <DataGrid
                 rows={rows}
-                columns={columns(handleDelete)} // Pass handleDelete to columns function
-                pageSize={5}
+                columns={columns(handleDelete)}
+                initialState={{
+                    pagination: {
+                        paginationModel: { page: 0, pageSize: 5 },
+                    },
+                }}
+                pageSizeOptions={[5, 10]}
                 checkboxSelection
             />
-              <Dialog
+            <Dialog
                 open={openDialog}
                 onClose={() => setOpenDialog(false)}
             >
                 <DialogTitle>Confirm Deletion</DialogTitle>
                 <DialogContent>
-                    Are you sure you want to delete this employee?
+                    Are you sure you want to delete this student?
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpenDialog(false)}>Cancel</Button>

@@ -1,10 +1,11 @@
 /* src/App.css */
 body {
-  background-color: #F8F9FD; /* Light blue background */
+  background-color: transparent; 
   height: 100vh;
   margin: 0;
  
 }
+
 .App{
   display: flex;
 }

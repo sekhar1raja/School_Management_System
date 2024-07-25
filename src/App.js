@@ -17,6 +17,12 @@ import Eventcalander from './components/pages/Teacher/eventcalander';
 import Attendance from './components/pages/Teacher/attendance';
 import Announcements from "./components/pages/Teacher/annocements";
 import AddEvent from './components/pages/addevent';
+import LeaveRequest from './components/pages/student/leaverequest';
+import AssignAssignments from './components/pages/Teacher/assignAssignments';
+import AttedanceStudent from './components/pages/student/attendancestudent';
+import UpdateStudent from './components/pages/updatestudent';
+import StudentCourse from './components/pages/student/studentcourses'
+import StudentAssignment from './components/pages/student/studentassignment'
 import Layout from './layout';
 import './App.css';
 
@@ -43,7 +49,14 @@ function App() {
           <Route path="eventcalander" element={<Eventcalander/>} />
           <Route path="attendance" element={<Attendance/>} />
           <Route path="annocements" element={<Announcements/>} />
-          
+          <Route path="assignassignments" element={<AssignAssignments/>} />
+          <Route path="leaverequest" element={<LeaveRequest/>} />
+          <Route path="attedancestudent" element={<AttedanceStudent/>} />
+          <Route path="updatestudent/:userId" element={<UpdateStudent/>} />
+          <Route path="studentcourse" element={<StudentCourse/>} />
+          <Route path="studentassignment" element={<StudentAssignment/>} />
+
+
           {/* Add more routes as needed */}
         </Route>
       </Routes>
