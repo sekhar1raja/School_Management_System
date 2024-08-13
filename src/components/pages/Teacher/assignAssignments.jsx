@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Typography, FormControl, InputLabel, Select, MenuItem, Button, Box, FormHelperText, Card, CardContent, TextField } from '@mui/material';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
-import "../style.css"; // Make sure to include your stylesheet
-import ReactQuill from 'react-quill'; // Import react-quill for rich text editor
-import 'react-quill/dist/quill.snow.css'; // Import quill's styles
-// Custom CSS
+import { Container, Typography, FormControl, InputLabel, Select, MenuItem, Button, Box, FormHelperText, Card, CardContent, TextField, Grid, IconButton, Divider, LinearProgress, Switch, FormControlLabel } from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import "./teastyle.css";
 
-
-// Component for assigning assignments
 const AssignAssignment = () => {
   const [courses, setCourses] = useState([]);
   const [sections, setSections] = useState([]);
@@ -16,67 +16,106 @@ const AssignAssignment = () => {
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedSection, setSelectedSection] = useState('');
   const [selectedCourseOffered, setSelectedCourseOffered] = useState('');
-  const [assignmentTitle, setAssignmentTitle] = useState('');
+  const [assignmentName, setAssignmentName] = useState('');
   const [assignmentDescription, setAssignmentDescription] = useState('');
-  const [instructions, setInstructions] = useState('');
+  const [assignmentInstruction, setAssignmentInstruction] = useState('');
   const [comments, setComments] = useState('');
+  const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [deadline, setDeadline] = useState(null);
+  const [isAssignmentOpen, setIsAssignmentOpen] = useState(true);
+
+  const handleFileChange = (e) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const professorId = localStorage.getItem('userId');
+    const formData = new FormData();
+    formData.append('courseId', selectedCourse);
+    formData.append('sectionId', selectedSection);
+    formData.append('subjectId', selectedCourseOffered);
+    formData.append('assignmentName', assignmentName);
+    formData.append('description', assignmentDescription);
+    formData.append('assignmentInstruction', assignmentInstruction);
+    formData.append('comments', comments);
+    formData.append('professorId', professorId);
+    
+    if (deadline) {
+      const formattedDeadline = deadline.toISOString(); // Format the date as 'YYYY-MM-DD'
+      formData.append('deadline', formattedDeadline);
+    }
+    
+    formData.append('isAssignmentOpen', isAssignmentOpen ? 1 : 0);
+    
+    if (file) {
+      formData.append('file', file); 
+    }
+    
+    setUploading(true);
+    
+    try {
+      const response = await axios.post('http://localhost:8080/user/publishAssignment', formData, {
+        headers: {
+          'Content-Type': "multipart/form-data"
+        },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(percentCompleted);
+        },
+      });
+      
+      alert('Assignment assigned successfully!');
+    } catch (error) {
+      console.error('There was an error assigning the assignment!', error);
+    } finally {
+      setUploading(false);
+      setSelectedCourse('');
+      setSelectedSection('');
+      setSelectedCourseOffered('');
+      setAssignmentDescription('');
+      setAssignmentInstruction('');
+      setComments('');
+      setDeadline(null);
+      setFile(null);
+      setUploadProgress(0);
+    }
+  };
+  
+  
+  
 
   useEffect(() => {
     fetch('http://localhost:8080/util/course')
       .then(response => response.json())
       .then(data => {
-        console.log('Courses:', data);
-        setCourses(Array.isArray(data) ? data : []); // Ensure data is an array
+        setCourses(Array.isArray(data) ? data : []);
       })
       .catch(error => console.error('Error fetching courses:', error));
 
     fetch('http://localhost:8080/util/section')
       .then(response => response.json())
       .then(data => {
-        console.log('Sections:', data);
-        setSections(Array.isArray(data) ? data : []); // Ensure data is an array
+        setSections(Array.isArray(data) ? data : []);
       })
       .catch(error => console.error('Error fetching sections:', error));
   }, []);
 
   useEffect(() => {
     if (selectedCourse) {
-      const courseId = selectedCourse; // courseId is now the selectedCourse
+      const courseId = selectedCourse;
       fetch(`http://localhost:8080/util/subjectByCourseId?courseId=${courseId}`)
         .then(response => response.json())
         .then(data => {
-          console.log('Course Offered:', data);
-          setCourseOffered(Array.isArray(data) ? data : []); // Ensure data is an array
+          setCourseOffered(Array.isArray(data) ? data : []);
         })
         .catch(error => console.error('Error fetching course offered:', error));
     }
   }, [selectedCourse]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Create an assignment object
-    const assignment = {
-      course: selectedCourse,
-      section: selectedSection,
-      courseOffered: selectedCourseOffered,
-      title: assignmentTitle,
-      description: assignmentDescription,
-      instructions: instructions
-    };
-
-    // Replace with your actual API endpoint
-    axios.post('/api/assignments', assignment)
-      .then(response => {
-        // Handle successful submission
-        alert('Assignment assigned successfully!');
-      })
-      .catch(error => {
-        // Handle errors
-        console.error('There was an error assigning the assignment!', error);
-      });
-  };
-
   return (
     <Container>
       <img
@@ -88,109 +127,195 @@ const AssignAssignment = () => {
 
       <Card className="assignment-card">
         <CardContent>
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="course-label">Select Course</InputLabel>
-            <Select
-              labelId="course-label"
-              value={selectedCourse}
-              onChange={(e) => setSelectedCourse(e.target.value)}
+          <Box border={1} borderRadius={4} padding={3}>
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth margin="normal">
+                    <InputLabel id="course-label">Select Course</InputLabel>
+                    <Select
+                      labelId="course-label"
+                      value={selectedCourse}
+                      onChange={(e) => setSelectedCourse(e.target.value)}
+                      size="small"
+                    >
+                      <MenuItem value="">
+                        <em>Select Course</em>
+                      </MenuItem>
+                      {courses.map(course => (
+                        <MenuItem key={course.id} value={course.courseOfferedId}>
+                          {course.courseName}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>Select a course</FormHelperText>
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth margin="normal">
+                    <InputLabel id="program-label">Select Program</InputLabel>
+                    <Select
+                      labelId="program-label"
+                      value={selectedCourseOffered}
+                      onChange={(e) => setSelectedCourseOffered(e.target.value)}
+                      size="small"
+                    >
+                      <MenuItem value="">
+                        <em>Select Program</em>
+                      </MenuItem>
+                      {courseOffered.map(courseSubject => (
+                        <MenuItem key={courseSubject.id} value={courseSubject.courseSubjectId}>
+                          {courseSubject.subjectName}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>Select a program to assign</FormHelperText>
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <FormControl fullWidth margin="normal">
+                    <InputLabel id="section-label">Select Section</InputLabel>
+                    <Select
+                      labelId="section-label"
+                      value={selectedSection}
+                      onChange={(e) => setSelectedSection(e.target.value)}
+                      size="small"
+                    >
+                      <MenuItem value="">
+                        <em>Select Section</em>
+                      </MenuItem>
+                      {sections.map(section => (
+                        <MenuItem key={section.id} value={section.sectionId}>
+                          {section.section}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>Select a section for the course</FormHelperText>
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    label="Assignment Title"
+                    fullWidth
+                    margin="normal"
+                    value={assignmentName}
+                    onChange={(e) => setAssignmentName(e.target.value)}
+                    required
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    label="Assignment Description"
+                    fullWidth
+                    margin="normal"
+                    multiline
+                    rows={4}
+                    value={assignmentDescription}
+                    onChange={(e) => setAssignmentDescription(e.target.value)}
+                    required
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    label="Instructions"
+                    fullWidth
+                    margin="normal"
+                    multiline
+                    rows={4}
+                    value={assignmentInstruction}
+                    onChange={(e) => setAssignmentInstruction(e.target.value)}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={3}>
+        <DatePicker
+          selected={deadline}
+          onChange={(date) => setDeadline(date)}
+          dateFormat="MMMM d, yyyy time"
+          placeholderText="Select a date"
+          customInput={
+            <TextField
+              label="Deadline"
+              fullWidth
+              margin="normal"
+              InputProps={{ readOnly: true }}
+              variant="outlined"
               size="small"
-            >
-              <MenuItem value="">
-                <em>Select Course</em>
-              </MenuItem>
-              {courses.map(course => (
-                <MenuItem key={course.id} value={course.courseOfferedId}>
-                  {course.courseName}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>Select a course</FormHelperText>
-          </FormControl>
-
-          
-
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="program-label">Select Program</InputLabel>
-            <Select
-              labelId="program-label"
-              value={selectedCourseOffered}
-              onChange={(e) => setSelectedCourseOffered(e.target.value)}
-              size="small"
-            >
-              <MenuItem value="">
-                <em>Select Program</em>
-              </MenuItem>
-              {courseOffered.map(courseSubject => (
-                <MenuItem key={courseSubject.id} value={courseSubject.courseSubjectId}>
-                  {courseSubject.subjectName}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>Select a program to assign</FormHelperText>
-          </FormControl>
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="section-label">Select Section</InputLabel>
-            <Select
-              labelId="section-label"
-              value={selectedSection}
-              onChange={(e) => setSelectedSection(e.target.value)}
-              size="small"
-            >
-              <MenuItem value="">
-                <em>Select Section</em>
-              </MenuItem>
-              {sections.map(section => (
-                <MenuItem key={section.id} value={section.sectionId}>
-                  {section.section}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>Select a section for the course</FormHelperText>
-          </FormControl>
-          <TextField
-            label="Assignment Title"
-            fullWidth
-            margin="normal"
-            value={assignmentTitle}
-            onChange={(e) => setAssignmentTitle(e.target.value)}
-            required
-          />
-
-          <TextField
-            label="Assignment Description"
-            fullWidth
-            margin="normal"
-            multiline
-            rows={4}
-            value={assignmentDescription}
-            onChange={(e) => setAssignmentDescription(e.target.value)}
-            required
-          />
-
-          <TextField
-            label="Instructions"
-            fullWidth
-            margin="normal"
-            multiline
-            rows={4}
-            value={instructions}
-            onChange={(e) => setInstructions(e.target.value)}
-            required
-          />
-          <FormControl fullWidth margin="normal">
-        <Typography variant="h6" gutterBottom>Comments</Typography>
-        <ReactQuill
-          value={comments}
-          onChange={(value) => setComments(value)}
-          theme="snow"
-          modules={{ toolbar: true }}
-          placeholder="Enter comments here..."
+            />
+          }
+          popperPlacement="bottom-end"
         />
-      </FormControl>
+      </Grid>
+                <Grid item xs={12}>
+                  <div>
+                    <input
+                      id="file"
+                      type="file"
+                      style={{ display: 'none' }}
+                      onChange={handleFileChange}
+                    />
+                    <label htmlFor="file">
+                      <IconButton color="primary" component="span">
+                        <CloudUploadIcon /> Upload File
+                      </IconButton>
+                    </label>
+                    {file && (
+                      <Typography variant="body2" color="textSecondary">
+                          <li>Type:  {file.name}</li>
+                        <li>Type: {file.type}</li>
+                      </Typography>
+                    )}
+                  </div>
+                </Grid>
 
-          <Box mt={2}>
-            <Button variant="contained" color="primary" onClick={handleSubmit}>Upload Assignment</Button>
+                <Grid item xs={12}>
+                  <Typography variant="h6" gutterBottom>Comments</Typography>
+                  <ReactQuill
+                    value={comments}
+                    onChange={(value) => setComments(value)}
+                    theme="snow"
+                    modules={{ toolbar: true }}
+                    placeholder="Enter comments here..."
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Divider style={{ margin: '20px 0' }} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={isAssignmentOpen}
+                        onChange={(e) => setIsAssignmentOpen(e.target.checked)}
+                        name="isAssignmentOpen"
+                        color="primary"
+                      />
+                    }
+                    label="Is Assignment Open"
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Box display="flex" justifyContent="center" alignItems="center">
+                    {uploading && (
+                      <Box width="100%" mr={2}>
+                        <LinearProgress variant="determinate" value={uploadProgress} />
+                      </Box>
+                    )}
+                    <Button variant="contained" color="primary" type="submit" disabled={uploading}>
+                      {uploading ? 'Uploading...' : 'Upload Assignment'}
+                    </Button>
+                  </Box>
+                </Grid>
+              </Grid>
+            </form>
           </Box>
         </CardContent>
       </Card>

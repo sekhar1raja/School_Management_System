@@ -1,195 +1,185 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Dialog, TextField, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { Container, Typography, FormControl, InputLabel, Select, MenuItem, Button, Box, FormHelperText, Card, CardContent, Grid, Divider } from '@mui/material';
+import ReactQuill from 'react-quill'; // Import react-quill for rich text editor
+import 'react-quill/dist/quill.snow.css'; // Import quill's styles
 
 const Announcements = () => {
-  const [announcements, setAnnouncements] = useState([]);
   const [courses, setCourses] = useState([]);
   const [sections, setSections] = useState([]);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [newAnnouncement, setNewAnnouncement] = useState({
-    note: '',
-    courseId: '',
-    sectionId: '',
-    userId: '',
-  });
-  const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  // const [courseOffered, setCourseOffered] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedSection, setSelectedSection] = useState('');
+  // const [selectedCourseOffered, setSelectedCourseOffered] = useState('');
+  const [note, setnote] = useState('');
 
+  // Fetch courses and sections on component mount
   useEffect(() => {
-    fetchAnnouncements();
-    fetchCourses();
-    fetchSections();
+    fetch('http://localhost:8080/util/course')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched Courses:', data); // Debug log
+        setCourses(Array.isArray(data) ? data : []);
+      })
+      .catch(error => console.error('Error fetching courses:', error));
+
+    fetch('http://localhost:8080/util/section')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched Sections:', data); // Debug log
+        setSections(Array.isArray(data) ? data : []);
+      })
+      .catch(error => console.error('Error fetching sections:', error));
   }, []);
 
-  const fetchAnnouncements = () => {
-    axios.get('http://localhost:8080/util/announcement')
-      .then(response => setAnnouncements(response.data))
-      .catch(error => console.error('Error fetching announcements:', error));
-  };
+  // Fetch course offered when a course is selected
+  // useEffect(() => {
+  //   if (selectedCourse) {
+  //     fetch(`http://localhost:8080/util/subjectByCourseId?courseId=${selectedCourse}`)
+  //       .then(response => response.json())
+  //       .then(data => {
+  //         console.log('Fetched Course Offered:', data); // Debug log
+  //         setCourseOffered(Array.isArray(data) ? data : []);
+  //       })
+  //       .catch(error => console.error('Error fetching course offered:', error));
+  //   }
+  // }, [selectedCourse]);
 
-  const fetchCourses = () => {
-    axios.get('http://localhost:8080/util/course')
-      .then(response => setCourses(response.data))
-      .catch(error => console.error('Error fetching courses:', error));
-  };
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  const fetchSections = () => {
-    axios.get('http://localhost:8080/util/section')
-      .then(response => setSections(response.data))
-      .catch(error => console.error('Error fetching sections:', error));
-  };
+    // Get userId from local storage
+    const userId = localStorage.getItem('userId');
 
-  const handleOpenDialog = (announcement) => {
-    setSelectedAnnouncement(announcement);
-    setOpenDialog(true);
-    if (announcement) {
-      setNewAnnouncement({
-        note: announcement.note || '',
-        courseId: announcement.courseoffered?.courseId || '',
-        sectionId: announcement.section?.sectionId || '',
-        userId: announcement.user?.userId || '',
-      });
-      setSelectedCourse(announcement.courseoffered?.courseId || '');
-      setSelectedSection(announcement.section?.sectionId || '');
-    } else {
-      setNewAnnouncement({
-        note: '',
-        courseId: '',
-        sectionId: '',
-        userId: '',
-      });
-      setSelectedCourse('');
-      setSelectedSection('');
-    }
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    setSelectedAnnouncement(null);
-  };
-
-  const handleChange = (e) => {
-    setNewAnnouncement({
-      ...newAnnouncement,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleCourseChange = (e) => {
-    setSelectedCourse(e.target.value);
-  };
-
-  const handleSectionChange = (e) => {
-    setSelectedSection(e.target.value);
-  };
-
-  const handleAddAnnouncement = () => {
-    const announcementData = {
-      ...newAnnouncement,
-      courseId: selectedCourse,
-      sectionId: selectedSection,
+    // Prepare form data
+    const formData = {
+      courseoffered: {
+        courseOfferedId: parseInt(selectedCourse, 10) || null // Ensure it’s an integer
+      },
+      section: {
+        sectionId: parseInt(selectedSection, 10) || null
+      },
+      note,
+      user: {
+        userid: userId
+      } // Include userId in form data
     };
 
-    axios.post('http://localhost:8080/util/announcement', announcementData)
-      .then(() => {
-        fetchAnnouncements();
-        handleCloseDialog();
+    console.log('Form Data:', formData); // Debug log
+
+    // Send form data to the server
+    axios.post('http://localhost:8080/util/announcement', formData)
+      .then(response => {
+        alert('Announcement added successfully!');
+        setnote('');
+        setSelectedCourse('');
+        setSelectedSection('');
+        // setSelectedCourseOffered('');
       })
-      .catch(error => console.error('Error adding announcement:', error));
+      .catch(error => console.error('Error posting announcement:', error));
   };
-
-  const handleDeleteAnnouncement = (id) => {
-    axios.delete(`http://localhost:8080/util/announcement?announId=${id}`)
-      .then(() => fetchAnnouncements())
-      .catch(error => console.error('Error deleting announcement:', error));
-  };
-
-  const columns = [
-    { field: 'announcementId', headerName: 'ID', width: 90 },
-    { field: 'note', headerName: 'Note', width: 300 },
-    { field: 'courseoffered', headerName: 'Course', width: 150, valueGetter: params => params.row.courseoffered?.courseName || 'N/A' },
-    { field: 'section', headerName: 'Section', width: 150, valueGetter: params => params.row.section?.sectionName || 'N/A' },
-    { field: 'user', headerName: 'User', width: 150, valueGetter: params => params.row.user?.userName || 'N/A' },
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 150,
-      renderCell: (params) => (
-        <>
-          <Button onClick={() => handleOpenDialog(params.row)}>Edit</Button>
-          <Button onClick={() => handleDeleteAnnouncement(params.row.announcementId)}>Delete</Button>
-        </>
-      ),
-    },
-  ];
 
   return (
-    <div>
-      <h1>Announcements</h1>
-      <Button variant="contained" color="primary" onClick={() => handleOpenDialog(null)}>Add Announcement</Button>
-      <div style={{ height: 400, width: '100%' }}>
-        <DataGrid rows={announcements} columns={columns} pageSize={5} />
-      </div>
+    <Container>
+      <Typography variant="h4" gutterBottom>Add Announcements</Typography>
 
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <div style={{ padding: '20px' }}>
-          <h2>{selectedAnnouncement ? 'Edit Announcement' : 'Add Announcement'}</h2>
-          <TextField
-            label="Note"
-            name="note"
-            value={newAnnouncement.note}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="course-label">Course</InputLabel>
-            <Select
-              labelId="course-label"
-              value={selectedCourse}
-              onChange={handleCourseChange}
-            >
-              {courses.map(course => (
-                <MenuItem key={course.courseId} value={course.courseName}>
-                  {course.courseName}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="section-label">Section</InputLabel>
-            <Select
-              labelId="section-label"
-              value={selectedSection}
-              onChange={handleSectionChange}
-            >
-              {sections.map(section => (
-                <MenuItem key={section.sectionId} value={section.section}>
-                  {section.section}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-            label="User ID"
-            name="userId"
-            value={newAnnouncement.userId}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <Button variant="contained" color="primary" onClick={handleAddAnnouncement}>
-            {selectedAnnouncement ? 'Update' : 'Add'}
-          </Button>
-          <Button variant="contained" color="secondary" onClick={handleCloseDialog}>
-            Cancel
-          </Button>
-        </div>
-      </Dialog>
-    </div>
+      <Card>
+        <CardContent>
+          <Box border={1} borderRadius={4} padding={3}>
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={4}>
+                  <FormControl fullWidth margin="normal">
+                    <InputLabel id="course-label">Select Course</InputLabel>
+                    <Select
+                      labelId="course-label"
+                      value={selectedCourse}
+                      onChange={(e) => setSelectedCourse(e.target.value)}
+                      size="small"
+                    >
+                      <MenuItem value="">
+                        <em>Select Course</em>
+                      </MenuItem>
+                      {courses.map(course => (
+                        <MenuItem key={course.Id} value={course.courseOfferedId}>
+                          {course.courseName}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>Select a course</FormHelperText>
+                  </FormControl>
+                </Grid>
+
+                {/* <Grid item xs={12} sm={4}>
+                  <FormControl fullWidth margin="normal">
+                    <InputLabel id="program-label">Select Program</InputLabel>
+                    <Select
+                      labelId="program-label"
+                      value={selectedCourseOffered}
+                      onChange={(e) => setSelectedCourseOffered(e.target.value)}
+                      size="small"
+                    >
+                      <MenuItem value="">
+                        <em>Select Program</em>
+                      </MenuItem>
+                      {courseOffered.map(courseSubject => (
+                        <MenuItem key={courseSubject.id} value={courseSubject.courseSubjectId}>
+                          {courseSubject.subjectName}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>Select a program</FormHelperText>
+                  </FormControl>
+                </Grid> */}
+
+                <Grid item xs={12} sm={4}>
+                  <FormControl fullWidth margin="normal">
+                    <InputLabel id="section-label">Select Section</InputLabel>
+                    <Select
+                      labelId="section-label"
+                      value={selectedSection}
+                      onChange={(e) => setSelectedSection(e.target.value)}
+                      size="small"
+                    >
+                      <MenuItem value="">
+                        <em>Select Section</em>
+                      </MenuItem>
+                      {sections.map(section => (
+                        <MenuItem key={section.id} value={section.sectionId}>
+                          {section.section}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>Select a section</FormHelperText>
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Typography variant="h6" gutterBottom>Comments</Typography>
+                  <ReactQuill
+                    value={note}
+                    onChange={(value) => setnote(value)}
+                    theme="snow"
+                    modules={{ toolbar: true }}
+                    placeholder="Enter comments here..."
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Divider style={{ margin: '20px 0' }} />
+                  <Box display="flex" justifyContent="center" alignItems="center">
+                    <Button variant="contained" color="primary" type="submit">
+                      Submit
+                    </Button>
+                  </Box>
+                </Grid>
+              </Grid>
+            </form>
+          </Box>
+        </CardContent>
+      </Card>
+    </Container>
   );
 };
 

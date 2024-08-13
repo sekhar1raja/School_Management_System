@@ -134,7 +134,7 @@ export default function StudentTable() {
                         Search
                     </Button>
                     <Tooltip title="Add Student">
-                        <Link to="/adminform">
+                        <Link to="/adminstudentform">
                             <Edit fontSize="large" color="primary" />
                         </Link>
                     </Tooltip>

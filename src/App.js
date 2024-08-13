@@ -21,9 +21,13 @@ import LeaveRequest from './components/pages/student/leaverequest';
 import AssignAssignments from './components/pages/Teacher/assignAssignments';
 import AttedanceStudent from './components/pages/student/attendancestudent';
 import UpdateStudent from './components/pages/updatestudent';
-import StudentCourse from './components/pages/student/studentcourses'
-import StudentAssignment from './components/pages/student/studentassignment'
+import StudentCourse from './components/pages/student/studentcourses';
+import AssignmentsPage from './components/pages/student/studentassignment'; 
+import DoughnutChart from './components/pages/DoughnutChart';
+import StudentDashboard from './components/pages/student/studentdashboard';
+import LeaveApprove from './components/pages/Teacher/leaveapprove';
 import Layout from './layout';
+
 import './App.css';
 
 function App() {
@@ -43,6 +47,7 @@ function App() {
           <Route path="adminform" element={<AdminForm />} />
           <Route path="adminstudentform" element={<Adminstudentform />} />
           <Route path="events" element={<Events />} />
+          <Route path="doughnutchart" element={<DoughnutChart />} />
           <Route path="/" element={<AddEvent />} />
           <Route path="assigncourse" element={<AssignCoursetea />} />
           <Route path="coursedetail" element={<Coursedetails/>} />
@@ -54,8 +59,9 @@ function App() {
           <Route path="attedancestudent" element={<AttedanceStudent/>} />
           <Route path="updatestudent/:userId" element={<UpdateStudent/>} />
           <Route path="studentcourse" element={<StudentCourse/>} />
-          <Route path="studentassignment" element={<StudentAssignment/>} />
-
+          <Route path="assignments" element={<AssignmentsPage />}/>
+          <Route path="studentannouncements" element={<StudentDashboard/>} />
+          <Route path="leaveaaprove" element={<LeaveApprove/>} />
 
           {/* Add more routes as needed */}
         </Route>

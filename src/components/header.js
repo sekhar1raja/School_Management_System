@@ -316,19 +316,6 @@ export default function Dashboard() {
                     </ListItemIcon>
                     <ListItemText primary="Calendar" />
                   </ListItem>
-                  <ListItem
-                    button
-                    component={Link}
-                    to="/assignassignments"
-                    sx={listStyles.listItem}
-                  >
-                    <ListItemIcon sx={listStyles.listItemIcon}>
-                      <span className="material-symbols-rounded">
-                        assignment
-                      </span>
-                    </ListItemIcon>
-                    <ListItemText primary="Assignments" />
-                  </ListItem>
                   <ListItem button sx={listStyles.listItem}>
                     <ListItemIcon sx={listStyles.listItemIcon}>
                       <span className="material-symbols-rounded">grading</span>
@@ -339,15 +326,13 @@ export default function Dashboard() {
                   <ListSubheader inset sx={listStyles.subheader}>
                     Student
                   </ListSubheader>
-                  <ListItem button sx={listStyles.listItem}>
-                    <ListItemIcon sx={listStyles.listItemIcon}>
-                      <span className="material-symbols-rounded">
-                        dashboard
-                      </span>
-                    </ListItemIcon>
-                    <ListItemText primary="Dashboard" />
-                  </ListItem>
-                  <ListItem button sx={listStyles.listItem}>
+                  <>
+                  <ListItem
+                    button
+                    component={Link}
+                    to="/attedancestudent"
+                    sx={listStyles.listItem}
+                  >
                     <ListItemIcon sx={listStyles.listItemIcon}>
                       <span className="material-symbols-rounded">
                         co_present
@@ -355,13 +340,26 @@ export default function Dashboard() {
                     </ListItemIcon>
                     <ListItemText primary="Attendance" />
                   </ListItem>
-                  <ListItem button sx={listStyles.listItem}>
+                  <ListItem button component={Link}
+                    to="/studentcourse" sx={listStyles.listItem}>
                     <ListItemIcon sx={listStyles.listItemIcon}>
                       <span className="material-symbols-rounded">book</span>
                     </ListItemIcon>
                     <ListItemText primary="Course Details" />
                   </ListItem>
-                  <ListItem button sx={listStyles.listItem}>
+                  <ListItem button component={Link}
+                    to="/LeaveRequest" sx={listStyles.listItem}>
+                    <ListItemIcon sx={listStyles.listItemIcon}>
+                      <span className="material-symbols-rounded">book</span>
+                    </ListItemIcon>
+                    <ListItemText primary="LeaveRequest" />
+                  </ListItem>
+                  <ListItem
+                    button
+                    component={Link}
+                    to="/eventcalander"
+                    sx={listStyles.listItem}
+                  >
                     <ListItemIcon sx={listStyles.listItemIcon}>
                       <span className="material-symbols-rounded">
                         calendar_today
@@ -369,32 +367,21 @@ export default function Dashboard() {
                     </ListItemIcon>
                     <ListItemText primary="Calendar" />
                   </ListItem>
-                  <ListItem button sx={listStyles.listItem}>
+                  <ListItem button    component={Link}
+                    to="/studentdetailsform"sx={listStyles.listItem}>
                     <ListItemIcon sx={listStyles.listItemIcon}>
-                      <span className="material-symbols-rounded">
-                        assignment
-                      </span>
-                    </ListItemIcon>
-                    <ListItemText primary="Assignments" />
-                  </ListItem>
-                  <ListItem button sx={listStyles.listItem}>
-                    <ListItemIcon sx={listStyles.listItemIcon}>
-                      <span className="material-symbols-rounded">grading</span>
-                    </ListItemIcon>
-                    <ListItemText primary="Grade Profile" />
-                  </ListItem>
-                  <ListItem button sx={listStyles.listItem}>
-                    <ListItemIcon sx={listStyles.listItemIcon}>
-                      <span className="material-symbols-rounded">person</span>
+                      <span className="material-symbols-rounded">school</span>
                     </ListItemIcon>
                     <ListItemText primary="Profile" />
                   </ListItem>
                   <Divider />
                 </>
+                  <Divider />
+                </>
               )}
               {userRole === 2 && (
                 <>
-                  <>
+                  
                     <ListItem
                       button
                       component={Link}
@@ -467,20 +454,20 @@ export default function Dashboard() {
                       <ListItemText primary="Grade Profile" />
                     </ListItem>
                    
-                  </>
+
                   <Divider />
                 </>
               )}
               {userRole === 3 && (
                 <>
-                  
-                  <ListItem button sx={listStyles.listItem}>
+                  <ListItem button  component={Link}
+                    to="/studentannouncements" sx={listStyles.listItem}>
                     <ListItemIcon sx={listStyles.listItemIcon}>
                       <span className="material-symbols-rounded">
                         dashboard
                       </span>
                     </ListItemIcon>
-                    <ListItemText primary="Dashboard" />
+                    <ListItemText primary="Announcements" />
                   </ListItem>
                   <ListItem
                     button
@@ -502,6 +489,13 @@ export default function Dashboard() {
                     </ListItemIcon>
                     <ListItemText primary="Course Details" />
                   </ListItem>
+                  <ListItem button component={Link}
+                    to="/LeaveRequest" sx={listStyles.listItem}>
+                    <ListItemIcon sx={listStyles.listItemIcon}>
+                      <span className="material-symbols-rounded">book</span>
+                    </ListItemIcon>
+                    <ListItemText primary="LeaveRequest" />
+                  </ListItem>
                   <ListItem
                     button
                     component={Link}
@@ -514,15 +508,6 @@ export default function Dashboard() {
                       </span>
                     </ListItemIcon>
                     <ListItemText primary="Calendar" />
-                  </ListItem>
-                  <ListItem button   component={Link}
-                    to="/StudentAssignment" sx={listStyles.listItem}>
-                    <ListItemIcon sx={listStyles.listItemIcon}>
-                      <span className="material-symbols-rounded">
-                        assignment
-                      </span>
-                    </ListItemIcon>
-                    <ListItemText primary="Assignments" />
                   </ListItem>
                   <ListItem button    component={Link}
                     to="/studentdetailsform"sx={listStyles.listItem}>

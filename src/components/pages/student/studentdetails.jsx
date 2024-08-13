@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 function StudentProfile() {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -20,13 +19,17 @@ function StudentProfile() {
     state: "",
     postal_code: "",
     country: "",
-    section: "",
+    section: {   
+      sectionId: ""
+    },
     coursesOffered: {
-        courseOfferedId: ""
+      courseOfferedId: ""
     },
     fees: "",
-    semester:"",
+    currentSemester: "",
   });
+  const [imageSrc, setImageSrc] = useState("https://via.placeholder.com/150");
+
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
@@ -63,7 +66,40 @@ function StudentProfile() {
       setFormData({ ...formData, [name]: value });
     }
   };
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const newImageSrc = URL.createObjectURL(file);
+      setImageSrc(newImageSrc);
+    }
+  };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const userId = localStorage.getItem('userId');
+    try {
+      const response = await fetch(`http://localhost:8080/user/user?userId=${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          section: { id: formData.section },
+          coursesOffered: { courseOfferedId: formData.coursesOffered.courseOfferedId }
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update user data");
+      }
+
+      alert("User data updated successfully!");
+    } catch (error) {
+      console.error("Error updating user data:", error);
+    }
+  };
+    
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
@@ -75,11 +111,11 @@ function StudentProfile() {
             <div className="card-body">
               <div className="row" style={{ background: '#F7FAFC' }}>
                 <div className="col-md-8">
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                       <div className="d-flex justify-content-around align-items-center">
                         <h4 style={{ color: '#525F7F', fontWeight: 'bolder' }}>Personal Information</h4>
-                        <button type="submit" className="btn btn-success m-3">Edit Profile</button>
+                        <button type="submit" className="btn btn-success m-3">Update Profile</button>
                       </div>
                       <div className="mb-3">
                         <label htmlFor="firstName" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>First Name</label>
@@ -97,7 +133,7 @@ function StudentProfile() {
                       </div>
                       <div className="mb-3">
                         <label htmlFor="password" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Password</label>
-                        <input type="password" className="form-control shadow-sm" id="password" value={formData.password} name="password" onChange={handleChange} required />
+                        <input type="password" className="form-control shadow-sm" id="password" value={formData.password} name="password" onChange={handleChange} required autoComplete="current-password" />
                         <div className="invalid-feedback">
                           Please provide a password.
                         </div>
@@ -162,16 +198,25 @@ function StudentProfile() {
                             Please provide a city.
                           </div>
                         </div>
-                        <div className="col-md-3 mb-3">
-                          <label htmlFor="postal_code" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Zip Code</label>
-                          <input type="text" className="form-control shadow-sm" id="postal_code" value={formData.postal_code} name="postal_code" onChange={handleChange} required />
+                        <div className="col-md-6 mb-3">
+                          <label htmlFor="state" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>State</label>
+                          <input type="text" className="form-control shadow-sm" id="state" name="state" value={formData.state} onChange={handleChange} required />
                           <div className="invalid-feedback">
-                            Please provide a zip code.
+                            Please provide a state.
                           </div>
                         </div>
-                        <div className="col-md-3 mb-3">
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 mb-3">
+                          <label htmlFor="postal_code" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Postal Code</label>
+                          <input type="text" className="form-control shadow-sm" id="postal_code" name="postal_code" value={formData.postal_code} onChange={handleChange} required />
+                          <div className="invalid-feedback">
+                            Please provide a postal code.
+                          </div>
+                        </div>
+                        <div className="col-md-6 mb-3">
                           <label htmlFor="country" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Country</label>
-                          <input type="text" className="form-control shadow-sm" id="country" value={formData.country} name="country" onChange={handleChange} required />
+                          <input type="text" className="form-control shadow-sm" id="country" name="country" value={formData.country} onChange={handleChange} required />
                           <div className="invalid-feedback">
                             Please provide a country.
                           </div>
@@ -180,62 +225,55 @@ function StudentProfile() {
                     </div>
 
                     <div className="mb-4">
-                      <div className="col-md-12 mb-3">
-                        <label htmlFor="section.sectionId" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Section</label>
-                        <input type="text" className="form-control shadow-sm" id="section" name="section" value={formData.section} onChange={handleChange} required />
+                      <h4 style={{ color: '#525F7F' }}>Academic Details</h4>
+                      <div className="mb-3">
+                        <label htmlFor="section" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Section</label>
+                        <input type="text" className="form-control shadow-sm" id="section" name="section.sectionId" value={formData.section.sectionId} onChange={handleChange} required />
                         <div className="invalid-feedback">
                           Please provide a section.
                         </div>
                       </div>
-                      <div className="col-md-12 mb-3 d-flex row">
-                        <div className="col-md-4">
-                          <label htmlFor="fees" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Fees</label>
-                          <input type="text" className="form-control shadow-sm" id="fees" name="fees" value={formData.fees} onChange={handleChange} required />
-                          <div className="invalid-feedback">
-                            Please provide the fees.
-                          </div>
-                        </div>
-                        <div className="col-md-4">
-                          <label htmlFor="coursesOffered.courseOfferedId" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Course Details</label>
-                          <input type="text" className="form-control shadow-sm" id="coursesOffered.courseOfferedId" name="coursesOffered.courseOfferedId" value={formData.coursesOffered.courseName} onChange={handleChange} required />
-                          <div className="invalid-feedback">
-                            Please provide the course details.
-                          </div>
+                      <div className="mb-3">
+                        <label htmlFor="coursesOffered.courseOfferedId" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Course Offered ID</label>
+                        <input type="text" className="form-control shadow-sm" id="coursesOffered.courseOfferedId" name="coursesOffered.courseOfferedId" value={formData.coursesOffered.courseOfferedId} onChange={handleChange} required />
+                        <div className="invalid-feedback">
+                          Please provide a course offered ID.
                         </div>
                       </div>
                       <div className="mb-3">
-                        <label htmlFor="aboutMe" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>About Me</label>
-                        <textarea className="form-control shadow-sm" id="aboutMe" name="aboutMe" rows="3" value={formData.aboutMe} onChange={handleChange} required></textarea>
+                        <label htmlFor="fees" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Fees</label>
+                        <input type="number" className="form-control shadow-sm" id="fees" name="fees" value={formData.fees} onChange={handleChange} required />
                         <div className="invalid-feedback">
-                          Please tell us about yourself.
+                          Please provide fees.
+                        </div>
+                      </div>
+                      <div className="mb-3">
+                        <label htmlFor="currentSemester" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>Semester</label>
+                        <input type="text" className="form-control shadow-sm" id="currentSemester" name="currentSemester" value={formData.currentSemester} onChange={handleChange} required />
+                        <div className="invalid-feedback">
+                          Please provide a semester.
                         </div>
                       </div>
                     </div>
-
-                    <div className="d-flex justify-content-end">
-                      <button type="submit" className="btn btn-success m-3">Update</button>
-                      <button type="button" className="btn btn-danger m-3">Cancel</button>
-                    </div>
                   </form>
                 </div>
-                <div className="col-md-4">
-                  <div className="card text-center shadow-sm">
-                    <div className="card-body flex-column">
-                      <img src="https://via.placeholder.com/150" className="card-img-top rounded-circle mb-3" alt="Profile" />
-                      <h5 className="card-title">{formData.firstName} {formData.lastName}</h5>
-                      <p className="card-text">
-                        <strong>Email:</strong> {formData.email}<br />
-                        <strong>Contact Number:</strong> {formData.contactNumber}
-                      </p>
-                      {/* <button className="btn btn-primary">Update Photo</button> */}
-                    </div>
-                    <div className="card-body flex-column">
-                      <p className="card-text">About Me</p>
-                      <button className="btn btn-primary">Update Photo</button>
-                    </div>
+                <div className="col-md-4 text-center">
+                  <img src={imageSrc} alt="Profile" className="img-thumbnail mb-3" width="100px" height="100px" />
+                  <div className="mb-3">
+                    <label htmlFor="imageUpload" className="form-label">Upload Profile Picture</label>
+                    <input
+                      className="form-control"
+                      type="file"
+                      id="imageUpload"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="card-footer text-center">
+              <small className="text-muted">&copy; 2024 Student Management System</small>
             </div>
           </div>
         </div>

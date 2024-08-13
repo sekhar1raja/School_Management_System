@@ -3,13 +3,16 @@ import axios from 'axios';
 import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Button, Dialog, TextField, Typography, Box, Grid, Card, CardContent, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemText, ListItemIcon, Menu, MenuItem } from '@mui/material';
+import { Button, Dialog, TextField, Typography, Box, Grid,  Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemText, ListItemIcon, Menu, MenuItem } from '@mui/material';
 import { TimePicker, LocalizationProvider } from '@mui/lab';
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EventIcon from '@mui/icons-material/Event';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
+import {View, StyleSheet} from 'react-native';
 
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
+import "../style.css";
+import "./teastyle.css"
 
 const localizer = momentLocalizer(moment);
 
@@ -177,10 +180,18 @@ class Calendar extends Component {
       <Button key="submit" variant="contained" color="primary" onClick={() => { this.setNewAppointment(); this.handleClose(); }}>Submit</Button>,
     ];
 
+    const styles = StyleSheet.create({
+ 
+      row: {
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+      },
+    });
     return (
-      <Box p={3}>
+      <Box p={3} mt={3}backgroundColor='#f8f9fa'>
         <Typography variant="h4" gutterBottom>Event Calendar</Typography>
-        <Grid container spacing={3}>
+        <View style={{padding: 10, flex: 2,}} >
+        <View style={styles.row}>
           <Grid item xs={12} md={8}>
             <BigCalendar
               localizer={localizer}
@@ -196,10 +207,13 @@ class Calendar extends Component {
               eventPropGetter={(event) => ({
                 style: {
                   backgroundColor: event.color,
+                  borderRadius:'0px'
                 },
               })}
             />
           </Grid>
+          </View>
+          <View>
           <Grid item xs={12} md={4}>
             <Box mb={2}>
               {/* <Typography variant="h5" gutterBottom>Upcoming Events</Typography> */}
@@ -243,7 +257,9 @@ class Calendar extends Component {
               )} */}
             </Box>
           </Grid>
-        </Grid>
+          </View>
+         
+        </View>
 
         <Dialog open={this.state.openSlot} onClose={this.handleClose} aria-labelledby="form-dialog-title">
           <div className="dialog-content">

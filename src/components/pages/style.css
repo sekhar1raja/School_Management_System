@@ -1,7 +1,7 @@
 /* App.css */
 
 body{
-  background-color: transparent;
+  background-color: #F5F7FF !important;
 }
 .App {
     text-align: center;
@@ -21,89 +21,107 @@ body{
     flex-wrap: wrap;
   }
   
-  .card {
-    
-    display: block;
-    position: relative;
-    border-radius: 4px;
-    padding: 20px 20px;
-    text-decoration: none;
-    z-index: 0;
-    overflow: hidden;
-    cursor: pointer;
-    border: none;
-   
+/*      Home dashboard/*
 
-    }
-  .card:hover {
-    box-shadow: 7px 7px 29px -9px rgb(202, 199, 199);
-    -webkit-box-shadow: 7px 7px 29px -9px rgb(202, 199, 199);
-    -moz-box-shadow: 7px 7px 29px -9px rgb(202, 199, 199);
-    p {
-      transition: all 0.3s ease-out;
-      color: rgba(26, 25, 25, 0.8);
-    }
-    h3 {
-      transition: all 0.3s ease-out;
-      color: rgba(26, 25, 25, 0.8);
-    }
-  }
-  
-    
-  .grid {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  
-  .card-body{
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    /* color: white; */
-    background:#dadaff;
-  }
-  
-  .icon-wrapper {
-  
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    color: #5d5dff;
-    padding: 20px;
-    
-    }
+/* style.css */
+/* style.css */
 
-  .row .icon-1 .card {
-    background: #dadaff;
-    color:white;
-  }
-  .carddata{
-    text-align: justify;
-  }
+.grid-margin {
+  margin-bottom: 20px;
+}
 
-  .row .icon-2 .card {
-    background: #dadaff;
-    color:whitesmoke;
-  }
+.font-weight-bold {
+  font-weight: bold;
+}
 
-  .row .icon-3 .card {
-    background: #dadaff;
-    color:white;
-  }
+.font-weight-normal {
+  font-weight: normal;
+}
 
-  
-  .App {
-    text-align: center;
-  }
-  h1{
-    color: rgb(255, 166, 0);
-  }
+.text-primary {
+  color: #007bff;
+}
+
+.btn-light {
+  background-color: #f8f9fa;
+}
+
+.dropdown-menu-right {
+  right: 0;
+  left: auto;
+}
+
+.tale-bg {
+  background: url('https://img.freepik.com/free-vector/children-back-school-with-parents_52683-44266.jpg?t=st=1722039648~exp=1722043248~hmac=e6d81fc6a62626460ca50a6f7d0c8dd99fb76b42b0dc50f5d7a81b0418cb0568&w=1060') no-repeat center;
+  background-size: cover;
+  /* height: 100%; */
+}
+.row .tale-bg{
+  height: 100%;
+}
+
+.card-people img {
+  width: 100%;
+}
+
+.weather-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fs-30 {
+  font-size: 30px;
+}
+
+.card-tale, .card-dark-blue, .card-light-blue, .card-light-danger {
+  background-color: #7da0fa !important; /* For .card-tale */
+  color: white !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  border: none !important;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+/* Individual card colors */
+.card-dark-blue {
+  background-color: #4747a1 !important;
+}
+
+.card-light-blue {
+  background-color: #7978e9 !important;
+}
+
+.card-light-danger {
+  background-color: #f3797e !important;
+}
+
+/* Hover effects */
+.card-tale:hover, .card-dark-blue:hover, .card-light-blue:hover, .card-light-danger:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+
+.container-flex {
+  display: flex;
+  gap: 20px; /* Adjust the gap as needed */
+  justify-content: space-between; /* Optional: Adjusts alignment of items */
+}
+
+.flex-item-1 {
+  flex: 3; /* calander takes 2 parts */
+}
+
+.flex-item-2 {
+  flex: 1; /* chart takes 3 parts */
+  height: fit-content !important;
+}
+
+
+/***********************************************************/
+
   
   #Calendar {
     margin: auto;
@@ -111,9 +129,9 @@ body{
     display: flex;
     width: 100%;
   }
-  .rbc-calander{
+  /* .rbc-calander{
     width: 60%;
-  }
+  } */
   .event-_Calander_teacher_dashoard{
     width: 100% !important;
   }
@@ -163,105 +181,35 @@ body{
 }
 
 /* Flex item for the calendar */
-.calendar-container {
+/* .calendar-container {
   flex: 0 0 60%;
   box-sizing: border-box;
   padding: 10px;
+} */
+
+/* calendar.css */
+
+
+.rbc-event.rbc-selected {
+  /* border: 2px solid #000; */
 }
+
+.rbc-event  {
+  border: 2px solid #0ca93e;
+}
+
+
+
+
+
+/* Additional custom styles */
+.rbc-calendar {
+  font-family: 'Arial', sans-serif; /* Choose a good font for the calendar */
+}
+
 
 /* Flex item for the cards */
-.cardcontainer {
-  flex: 0 0 40%; 
-  box-sizing: border-box;
-  padding: 10px;
-  display: flex;
-  flex-wrap: wrap; 
-  flex-direction: column;
-}
-.icon{
-  font-size: 45px;
-}
 
-.btn-group {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1rem;
-}
-
-.icon-button {
-  color: #000; /* Adjust color as needed */
-  margin: 0 0.5rem;
-  border-radius: 50%; /* Rounded buttons */
-  min-width: 36px;
-  min-height: 36px;
-  padding: 0;
-  box-shadow: none; /* No shadow */
-}
-
-.icon-button:hover {
-  background-color: #a0afe7;  /* Light hover effect */
-}
-
-.rbc-toolbar-label {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin: 0 1rem;
-}
-
-.rbc-btn-group button {
-  color: #000; /* Adjust color as needed */
-  margin: 0 0.5rem;
-  border: 1px solid #ccc; /* Border around buttons */
-  border-radius: 50px; /* Rounded buttons */
-  padding: 0.5rem 1rem;
-  background-color: transparent; /* No background color */
-  cursor: pointer;
-}
-
-.rbc-btn-group button:hover {
-  background-color: #a0afe7; /* Light hover effect */
-}
-
-.rbc-btn-group button:active {
-  background-color:#feffff;  /* Slightly darker on active */
-}
-
-
-.cardsec2 {
-    box-sizing: border-box;
-    z-index: 1;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 1em;
-    border:0.2px solid rgb(202, 199, 199);
-    border-radius: 10px;
-    padding: 25px;
-    margin-bottom: 14px;
-    cursor: pointer;
-    background-color: #94a9f5;
- 
-}
-.cardsec2:hover{
-  box-shadow: 7px 7px 29px -9px rgb(202, 199, 199);
-  -webkit-box-shadow: 7px 7px 29px -9px rgb(202, 199, 199);
-  -moz-box-shadow: 7px 7px 29px -9px rgb(202, 199, 199);
-}
- /* Dilaouge box css */
- .dialog-content {
-  padding: 20px;
-}
-
-.dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 20px;
-}
-
-.dialog-actions button {
-  margin-left: 10px;
-}
 /*Teacher Dashboard*/
  /* Add this CSS to your stylesheet */
 

@@ -27,12 +27,12 @@ const columns = (handleDelete) => [
         width: 150,
         renderCell: (params) => (
             <div>
-                <Tooltip title="Edit Student">
-                    <Link to={`/edit-student/${params.row.id}`}>
+                <Tooltip title="Edit Employee">
+                <Link to={`/updatestudent/${params.row.id}`}>
                         <Edit color="primary" />
                     </Link>
                 </Tooltip>
-                <Tooltip title="Delete Student">
+                <Tooltip title="Delete Employee">
                     <Delete
                         color="secondary"
                         style={{ cursor: 'pointer', marginLeft: 16 }}
@@ -123,8 +123,8 @@ export default function StudentTable() {
                     <Button variant="contained" color="primary" onClick={handleSearch}>
                         Search
                     </Button>
-                    <Tooltip title="Add Student">
-                        <Link to="/adminstudentform"> {/* Adjust the route to your admin form */}
+                    <Tooltip title="Add Employee">
+                        <Link to="/adminform"> {/* Adjust the route to your admin form */}
                             <Edit fontSize="large" color="primary" />
                         </Link>
                     </Tooltip>

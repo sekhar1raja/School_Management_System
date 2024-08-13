@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { Container, Box, Typography, TextField, MenuItem, Select, FormControl, InputLabel, Button, Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import {
+  Container, Box, Typography, TextField, MenuItem, Select, FormControl, InputLabel,
+  Button, Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
+} from '@mui/material';
 
 const leaveTypes = [
   { value: 'vacation', label: 'Vacation' },
@@ -9,21 +12,33 @@ const leaveTypes = [
   { value: 'other', label: 'Other' }
 ];
 
-const leaveHistoryData = [
-  { id: 1, name: 'John Doe', leaveType: 'Vacation', fromDate: '12-10-2022', toDate: '14-10-2022', days: 3, notes: 'Family vacation', status: 'Approved' },
-  { id: 2, name: 'Jane Doe', leaveType: 'Sick', fromDate: '01-10-2022', toDate: '03-10-2022', days: 3, notes: 'Flu', status: 'Approved' }
-];
-
 const ApplyLeave = () => {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [leaveType, setLeaveType] = useState('');
-  const [userid, setEmployeeType] = useState('');
+  const [teachers, setTeachers] = useState([]);
+  const [selectedTeacherId, setSelectedTeacherId] = useState('');
   const [reason, setReason] = useState('');
   const [selectedDays, setSelectedDays] = useState(0);
-  const [leaveHistory, setLeaveHistory] = useState(leaveHistoryData);
+  const [leaveHistory, setLeaveHistory] = useState([]);
 
   useEffect(() => {
+    // Fetch all teachers with role ID 2
+    const fetchTeachers = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/user/user?roleId=2');
+        const data = await response.json();
+        setTeachers(data);
+      } catch (error) {
+        console.error('Error fetching teachers:', error);
+      }
+    };
+
+    fetchTeachers();
+  }, []);
+
+  useEffect(() => {
+    // Calculate the number of days between fromDate and toDate
     if (fromDate && toDate) {
       const from = new Date(fromDate);
       const to = new Date(toDate);
@@ -33,14 +48,69 @@ const ApplyLeave = () => {
     }
   }, [fromDate, toDate]);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    // Fetch leave history for the student using the stored student ID
+    const fetchLeaveHistory = async () => {
+      const studentId = localStorage.getItem('userId');
+      try {
+        const response = await fetch(`http://localhost:8080/util/getStudentLeaveRequest?student_id=${studentId}`);
+        const data = await response.json();
+        setLeaveHistory(data);
+      } catch (error) {
+        console.error('Error fetching leave history:', error);
+      }
+    };
+
+    fetchLeaveHistory();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // handle submit logic here
-    console.log('Form submitted', { fromDate, toDate, leaveType, userid, reason });
+
+    const userId = localStorage.getItem('userId');
+
+    const payload = {
+      leaveReason: reason,
+      student_id: {
+        userid: userId,
+      },
+      teacher_id: {
+        userid: selectedTeacherId,
+      },
+      isApproved: 0
+    };
+
+    try {
+      const response = await fetch('http://localhost:8080/util/leaveRequest', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        console.log('Leave request submitted successfully');
+        setFromDate('');
+        setToDate('');
+        setLeaveType('');
+        setSelectedTeacherId('');
+        setReason('');
+        // Fetch the updated leave history after submission
+        const studentId = localStorage.getItem('userId');
+        const updatedResponse = await fetch(`http://localhost:8080/util/getStudentLeaveRequest?student_id=${studentId}`);
+        const updatedData = await updatedResponse.json();
+        setLeaveHistory(updatedData);
+      } else {
+        console.error('Failed to submit leave request');
+      }
+    } catch (error) {
+      console.error('Error submitting leave request:', error);
+    }
   };
 
   const handleDelete = (id) => {
-    // handle delete logic here
+    // Handle delete logic here
     setLeaveHistory(leaveHistory.filter(leave => leave.id !== id));
   };
 
@@ -88,11 +158,18 @@ const ApplyLeave = () => {
                 </Select>
               </FormControl>
               <FormControl fullWidth margin="normal">
-                <TextField
-                  label="Sending to "
-                  value={userid}
-                  onChange={(e) => setEmployeeType(e.target.value)}
-                />
+                <InputLabel id="teacher-select-label">Send To</InputLabel>
+                <Select
+                  labelId="teacher-select-label"
+                  value={selectedTeacherId}
+                  onChange={(e) => setSelectedTeacherId(e.target.value)}
+                >
+                  {teachers.map(teacher => (
+                    <MenuItem key={teacher.userid} value={teacher.userid}>
+                      {teacher.firstName} {teacher.lastName} ({teacher.email})
+                    </MenuItem>
+                  ))}
+                </Select>
               </FormControl>
               <FormControl fullWidth margin="normal">
                 <TextField
@@ -109,7 +186,7 @@ const ApplyLeave = () => {
                   setFromDate('');
                   setToDate('');
                   setLeaveType('');
-                  setEmployeeType('');
+                  setSelectedTeacherId('');
                   setReason('');
                 }}>Cancel</Button>
                 <Button type="submit" variant="contained" color="primary">Submit</Button>
@@ -126,28 +203,28 @@ const ApplyLeave = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Name</TableCell>
+                  <TableCell>Id</TableCell>
                   <TableCell>Leave Type</TableCell>
                   <TableCell>From Date</TableCell>
                   <TableCell>To Date</TableCell>
                   <TableCell>Days</TableCell>
-                  <TableCell>Notes</TableCell>
+                  <TableCell>Reason</TableCell>
                   <TableCell>Status</TableCell>
                   <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {leaveHistory.map(leave => (
-                  <TableRow key={leave.id}>
-                    <TableCell>{leave.name}</TableCell>
+                  <TableRow key={leave.leaveRequestId}>
+                    <TableCell>{leave.leaveRequestId}</TableCell>
                     <TableCell>{leave.leaveType}</TableCell>
                     <TableCell>{leave.fromDate}</TableCell>
                     <TableCell>{leave.toDate}</TableCell>
                     <TableCell>{leave.days}</TableCell>
-                    <TableCell>{leave.notes}</TableCell>
-                    <TableCell>{leave.status}</TableCell>
+                    <TableCell>{leave.leaveReason}</TableCell>
+                    <TableCell>{leave.isApproved === 1 ? 'Approved' : leave.isApproved === 2 ? 'Rejected' : 'Pending'}</TableCell>
                     <TableCell>
-                      <Button variant="contained" color="secondary" onClick={() => handleDelete(leave.id)}>Delete</Button>
+                      <Button variant="contained" color="secondary" onClick={() => handleDelete(leave.leaveRequestId)}>Delete</Button>
                     </TableCell>
                   </TableRow>
                 ))}

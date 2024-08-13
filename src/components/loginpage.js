@@ -1,19 +1,9 @@
 import React, { useState } from 'react';
-
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import { Button, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, Typography } from '@mui/material';
 import Dropdown from 'react-dropdown';
 import { useNavigate } from 'react-router-dom';
-import 'react-dropdown/style.css';  // Import styles for the dropdown
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import 'react-dropdown/style.css';  // Import styles for the dropdown
 import logo from './logo1.png';
 
 const defaultTheme = createTheme();
@@ -34,7 +24,7 @@ export default function SignInSide() {
   const options = [
     { value: 1, label: 'admin' },
     { value: 2, label: 'student' },
-    { value: 3, label: 'teacher' },
+    { value: 3, label: 'professor' },
   ];
 
   const defaultOption = options[0];
@@ -93,24 +83,39 @@ export default function SignInSide() {
         },
         body: JSON.stringify(userData),
       });
-    
+
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.statusText}`);
       }
-    
+
       const result = await response.json();
       console.log(result.roles);
-    
+
       // Store user role in local storage
       localStorage.setItem('userRole', result.roles.id);
       localStorage.setItem('userId', result.userid);
       localStorage.setItem('firstName', result.firstName);
-      localStorage.setItem('CourseId', result.coursesOffered.courseOfferedId);
-      
       console.log(localStorage);
-      navigate("/dashboard");
-    
       console.log(result);
+
+      // Navigate to different pages based on the role
+      switch (result.roles.id) {
+        case 1:
+          navigate('/Dashboard');
+          break;
+        case 2:
+          navigate('/TeacherDashboard');
+          break;
+        case 3:
+          navigate('/studentannouncements');
+          break;
+        default:
+          navigate('/dashboard'); // Default to dashboard if role is not recognized
+      }
+
+      console.log(result);
+      localStorage.setItem('CourseId', result.coursesOffered.courseOfferedId);
+      localStorage.setItem('semester', result.currentSemester);
     } catch (error) {
       console.error('There was a problem with your fetch operation:', error);
       setMessage('Login failed');
@@ -145,11 +150,8 @@ export default function SignInSide() {
               alignItems: 'center',
             }}
           >
-           <img src={logo} alt="Logo" />
-           
-            <Typography component="h1" variant="h5" sx={{
-              paddingTop:5,
-            }}>
+            <img src={logo} alt="Logo" />
+            <Typography component="h1" variant="h5" sx={{ paddingTop: 5 }}>
               Sign in with Your school Account
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
@@ -198,7 +200,7 @@ export default function SignInSide() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In 
+                Sign In
               </Button>
               {message && (
                 <Typography color="error" variant="body2">

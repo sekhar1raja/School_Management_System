@@ -139,7 +139,7 @@ function RegistrationPages() {
         <div className="col-lg-12">
           <div className="card shadow-lg p-3 mb-5 bg-white rounded">
             <div className="mb-4">
-              <h4 style={{ color: "#525F7F" }}>Update Student</h4>
+              <h4 style={{ color: "#525F7F" }}>Update The Information</h4>
               <p>ID: {userId}</p>
             </div>
 
@@ -250,16 +250,16 @@ function RegistrationPages() {
                           Roles
                         </label>
                         <select
-  className="form-control shadow-sm"
-  id="roles.id"
-  name="roles.id"
-  value={formData.roles ? formData.roles.id : ""}
-  onChange={handleChange}
->
-  <option value="">Select Role</option>
-  <option value="3">Teacher</option>
-  <option value="2">Student</option>
-</select>
+                        className="form-control shadow-sm"
+                        id="roles.id"
+                        name="roles.id"
+                        value={formData.roles ? formData.roles.id : ""}
+                        onChange={handleChange}
+                      >
+                        <option value="">Select Role</option>
+                        <option value="3">Teacher</option>
+                        <option value="2">Student</option>
+                      </select>
                         <div className="invalid-feedback">
                           Please select a role.
                         </div>
@@ -553,19 +553,19 @@ function RegistrationPages() {
                         Section
                       </label>
                       <select
-  className="form-control shadow-sm"
-  id="section.sectionId"
-  name="section.sectionId"
-  value={formData.section ? formData.section.sectionId : ""}
-  onChange={handleChange}
->
-  <option value="">Select Section</option>
-  {sections.map((section) => (
-    <option key={section.sectionId} value={section.sectionId}>
-      {section.section}
-    </option>
-  ))}
-</select>
+                      className="form-control shadow-sm"
+                      id="section.sectionId"
+                      name="section.sectionId"
+                      value={formData.section ? formData.section.sectionId : ""}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Section</option>
+                      {sections.map((section) => (
+                        <option key={section.sectionId} value={section.sectionId}>
+                          {section.section}
+                        </option>
+                      ))}
+                    </select>
                       <div className="invalid-feedback">
                         Please select a section.
                       </div>
@@ -639,7 +639,7 @@ function RegistrationPages() {
                         
                       />
                       <div className="invalid-feedback">
-                        Please provide the fees.
+                        Please provide the Salary.
                       </div>
                     </div>
 

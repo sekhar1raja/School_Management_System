@@ -1,47 +1,38 @@
-import React, { useState } from 'react';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Table, Button } from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Table, Button } from 'reactstrap';
+import moment from 'moment';
 
 const AssignmentPage = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedSubject, setSelectedSubject] = useState('Select Subject');
+  const location = useLocation();
+  const [assignments, setAssignments] = useState([]);
 
-  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
-  
-  const subjects = ['Web Development', '.NET', 'Responsive Site Designing', 'Mobile'];
+  const queryParams = new URLSearchParams(location.search);
+  const courseId = queryParams.get('courseId');
+  const sectionId = queryParams.get('sectionId');
 
-  const assignments = [
-    {
-      title: 'Assignment 1: My Career Profile and Labour Market Research (Worth 25% of Final Grade)',
-      status: '1 Submission, 1 File',
-      score: '56.75 / 100 - 56.75%',
-      feedback: 'Read'
-    },
-    {
-      title: 'Assignment 2: My Resume and Cover Letter - Part One (Worth 25% of Final Grade and is comprised of two parts)',
-      status: '2 Submissions, 2 Files',
-      score: '43 / 60 - 71.67%',
-      feedback: 'Read'
+  useEffect(() => {
+    if (courseId && sectionId) {
+      const fetchAssignments = async () => {
+        try {
+          const response = await fetch(`http://localhost:8080/user/getAssignmentBySubjectSection?courseId=${courseId}&sectionId=${sectionId}`);
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          setAssignments(data);
+        } catch (error) {
+          console.error("Failed to fetch assignments:", error);
+        }
+      };
+
+      fetchAssignments();
     }
-  ];
+  }, [courseId, sectionId]);
 
   return (
     <div className="container mt-4">
-      <div className="mb-3">
-        <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown}>
-          <DropdownToggle caret>
-            {selectedSubject}
-          </DropdownToggle>
-          <DropdownMenu>
-            {subjects.map((subject, index) => (
-              <DropdownItem key={index} onClick={() => setSelectedSubject(subject)}>
-                {subject}
-              </DropdownItem>
-            ))}
-          </DropdownMenu>
-        </Dropdown>
-      </div>
-
-      <h2 className="mb-3">Assignment</h2>
+      <h2 className="mb-3">Assignments</h2>
       
       <Button color="primary" className="mb-3">
         View History
@@ -50,19 +41,19 @@ const AssignmentPage = () => {
       <Table bordered hover>
         <thead>
           <tr>
-            <th>Assignment</th>
-            <th>Completion Status</th>
-            <th>Score</th>
-            <th>Evaluation Status</th>
+            <th>Assignment Name</th>
+            <th>Instruction</th>
+            <th>Open Status</th>
+            <th>Deadline</th>
           </tr>
         </thead>
         <tbody>
           {assignments.map((assignment, index) => (
             <tr key={index}>
-              <td>{assignment.title}</td>
-              <td>{assignment.status}</td>
-              <td>{assignment.score}</td>
-              <td>{assignment.feedback}</td>
+              <td>{assignment.assignmentName}</td>
+              <td>{assignment.assignmentInstruction}</td>
+              <td>{assignment.isAssignmentOpen ? 'Open' : 'Closed'}</td>
+              <td>{moment(assignment.deadline).format('YYYY-MM-DD HH:mm:ss')}</td>
             </tr>
           ))}
         </tbody>
