@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import "../pages/responsive.css";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Container,
   Typography,
@@ -9,7 +11,22 @@ import {
   Button,
   Box,
   FormHelperText,
+  Card,
+  CardContent,
+  CardActions,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import "../pages/Teacher/teastyle.css"; 
+import { ToastContainer, toast } from "react-toastify";
+
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  maxWidth: 600,
+  margin: "auto",
+  [theme.breakpoints.up("sm")]: {
+    maxWidth: 800,
+  },
+}));
 
 const AssignCoursetea = () => {
   const [teachers, setTeachers] = useState([]);
@@ -47,7 +64,6 @@ const AssignCoursetea = () => {
         setSections(Array.isArray(data) ? data : []); // Ensure data is an array
       })
       .catch((error) => console.error("Error fetching sections:", error));
-      
   }, []);
 
   useEffect(() => {
@@ -59,9 +75,7 @@ const AssignCoursetea = () => {
           console.log("Course Offered:", data);
           setCourseOffered(Array.isArray(data) ? data : []); // Ensure data is an array
         })
-        .catch((error) =>
-          console.error("Error fetching course offered:", error)
-        );
+        .catch((error) => console.error("Error fetching course offered:", error));
     }
   }, [selectedCourse]);
 
@@ -70,7 +84,6 @@ const AssignCoursetea = () => {
       user: {
         userid: selectedTeacher
       },
-    
       section: {
         sectionId: selectedSection
       },
@@ -79,10 +92,9 @@ const AssignCoursetea = () => {
       },
       courseSubjects: {
         courseSubjectId: selectedCourseOffered
-        }
-    
+      }
     };
-  
+
     try {
       const response = await fetch('http://localhost:8080/util/assignProfessorSubject', {
         method: 'POST',
@@ -91,23 +103,25 @@ const AssignCoursetea = () => {
         },
         body: JSON.stringify(assignment),
       });
-  
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(errorText);
       }
-  
+
       const data = await response.json(); // Parse JSON response
       console.log('Assignment successful:', data);
-      // Optionally reset state or show a success message
+      toast.success('Course assigned successfully!');
+      // Optionally reset state
       setSelectedTeacher('');
+      setSelectedCourse('');
       setSelectedSection('');
       setSelectedCourseOffered('');
     } catch (error) {
       console.error('Error assigning course:', error);
+      toast.error('Failed to assign course. Please try again.');
     }
   };
-  
 
   return (
     <Container>
@@ -121,119 +135,100 @@ const AssignCoursetea = () => {
           marginBottom: "20px",
         }}
       />
-      <Typography variant="h4" gutterBottom>
-        Assign Course to Professor
-      </Typography>
+      <StyledCard>
+        <ToastContainer />
+        <CardContent>
+          <Typography variant="h4" gutterBottom>
+            Assign Course to Professor
+          </Typography>
 
-      <FormControl fullWidth margin="normal">
-        <InputLabel id="teacher-label">Select Teacher</InputLabel>
-        <Select
-          labelId="teacher-label"
-          value={selectedTeacher || ""}
-          onChange={(e) => setSelectedTeacher(e.target.value)}
-        >
-          <MenuItem value="">
-            <em>Select Teacher</em>
-          </MenuItem>
-          {teachers.map((teacher) => (
-            <MenuItem key={teacher.id} value={teacher.userid}>
-              {teacher.firstName}
-            </MenuItem>
-          ))}
-        </Select>
-        <FormHelperText>Select a teacher for assignment</FormHelperText>
-      </FormControl>
-
-      <FormControl fullWidth margin="normal">
-        <InputLabel id="course-label">Select Course</InputLabel>
-        <Select
-          labelId="course-label"
-          value={selectedCourse || ""}
-          onChange={(e) => setSelectedCourse(e.target.value)}
-        >
-          <MenuItem value="">
-            <em>Select Course</em>
-          </MenuItem>
-          {courses.map((course) => (
-            <MenuItem key={course.courseOfferedId} value={course.courseOfferedId}>
-              {course.courseName}
-            </MenuItem>
-          ))}
-        </Select>
-        <FormHelperText>Select a course to assign</FormHelperText>
-      </FormControl>
-
-      {/* <FormControl fullWidth margin="normal">
-        <InputLabel id="program-label">Select Program</InputLabel>
-        <Select
-          labelId="program-label"
-          value={selectedCourseOffered || ""}
-          onChange={(e) => setSelectedCourseOffered(e.target.value)}
-        >
-          <MenuItem value="">
-            <em>Select Program</em>
-          </MenuItem>
-          {courseOffered.map((courseSubject) => (
-            <MenuItem
-              key={courseSubject.courseOffered.courseSubjectId}
-              value={courseSubject.courseOffered.courseSubjectId}
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="teacher-label">Select Teacher</InputLabel>
+            <Select
+              labelId="teacher-label"
+              value={selectedTeacher || ""}
+              onChange={(e) => setSelectedTeacher(e.target.value)}
             >
-              {courseSubject.subjectName}
-            </MenuItem>
-          ))}
-        </Select>
-        
-        <FormHelperText>Select a program to assign</FormHelperText>
-      </FormControl> */}
-      
-      <FormControl fullWidth margin="normal">
-        <InputLabel id="program-label">Select Subject</InputLabel>
-        <Select
-          labelId="program-label"
-          value={selectedCourseOffered || ""}
-          onChange={(e) => setSelectedCourseOffered(e.target.value)}
-        >
-          <MenuItem value="">
-            <em>Select Program</em>
-          </MenuItem>
-          {courseOffered.map((courseSubject) => (
-            <MenuItem
-              key={courseSubject.courseSubjectId}
-              value={courseSubject.courseSubjectId}
+              <MenuItem value="">
+                <em>Select Teacher</em>
+              </MenuItem>
+              {teachers.map((teacher) => (
+                <MenuItem key={teacher.id} value={teacher.userid}>
+                  {teacher.firstName}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>Select a teacher for assignment</FormHelperText>
+          </FormControl>
+
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="course-label">Select Course</InputLabel>
+            <Select
+              labelId="course-label"
+              value={selectedCourse || ""}
+              onChange={(e) => setSelectedCourse(e.target.value)}
             >
-              {courseSubject.subjectName}
-            </MenuItem>
-          ))}
-        </Select>
-        
-        <FormHelperText>Select a program to assign</FormHelperText>
-      </FormControl>
+              <MenuItem value="">
+                <em>Select Course</em>
+              </MenuItem>
+              {courses.map((course) => (
+                <MenuItem key={course.courseOfferedId} value={course.courseOfferedId}>
+                  {course.courseName}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>Select a course to assign</FormHelperText>
+          </FormControl>
 
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="program-label">Select Subject</InputLabel>
+            <Select
+              labelId="program-label"
+              value={selectedCourseOffered || ""}
+              onChange={(e) => setSelectedCourseOffered(e.target.value)}
+            >
+              <MenuItem value="">
+                <em>Select Subject</em>
+              </MenuItem>
+              {courseOffered.map((courseSubject) => (
+                <MenuItem
+                  key={courseSubject.courseSubjectId}
+                  value={courseSubject.courseSubjectId}
+                >
+                  {courseSubject.subjectName}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>Select a subject to assign</FormHelperText>
+          </FormControl>
 
-      <FormControl fullWidth margin="normal">
-        <InputLabel id="section-label">Select Section</InputLabel>
-        <Select
-          labelId="section-label"
-          value={selectedSection || ""}
-          onChange={(e) => setSelectedSection(e.target.value)}
-        >
-          <MenuItem value="">
-            <em>Select Section</em>
-          </MenuItem>
-          {sections.map((section) => (
-            <MenuItem key={section.id} value={section.sectionId}>
-              {section.section}
-            </MenuItem>
-          ))}
-        </Select>
-        <FormHelperText>Select a section for the course</FormHelperText>
-      </FormControl>
-
-      <Box mt={2}>
-        <Button variant="contained" color="primary" onClick={handleAssign}>
-          Assign Course
-        </Button>
-      </Box>
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="section-label">Select Section</InputLabel>
+            <Select
+              labelId="section-label"
+              value={selectedSection || ""}
+              onChange={(e) => setSelectedSection(e.target.value)}
+            >
+              <MenuItem value="">
+                <em>Select Section</em>
+              </MenuItem>
+              {sections.map((section) => (
+                <MenuItem key={section.id} value={section.sectionId}>
+                  {section.section}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>Select a section for the course</FormHelperText>
+          </FormControl>
+        </CardContent>
+        <CardActions>
+          <Box mt={2} mx="auto">
+            <Button variant="contained" color="primary" onClick={handleAssign}>
+              Assign Course
+            </Button>
+          </Box>
+        </CardActions>
+      </StyledCard>
     </Container>
   );
 };

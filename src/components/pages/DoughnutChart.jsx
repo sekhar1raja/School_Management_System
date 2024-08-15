@@ -8,12 +8,12 @@ const DoughnutChart = ({ teachers, employees, holidays }) => {
   const chartRef = useRef(null);
 
   const data = {
-    labels: ['Teachers', 'Employees', 'Holidays'],
+    labels: ['Teachers', 'Employees', '/'],
     datasets: [
       {
         label: 'Count',
         data: [teachers, employees, holidays],
-        backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56'],
+        backgroundColor: ['#36A2EB', '#FF6384', '#FFC56'],
         hoverBackgroundColor: ['#36A2EB', '#FF6384', '#FFCE56'],
       },
     ],

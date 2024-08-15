@@ -20,7 +20,6 @@ import {
 import {
   Menu as MenuIcon,
   AccountCircle as AccountCircleIcon,
-  Settings as SettingsIcon,
   Notifications as NotificationsIcon,
 } from "@mui/icons-material";
 import { ThemeProvider, styled, useTheme } from "@mui/material/styles";
@@ -44,12 +43,15 @@ const Drawer = styled(MuiDrawer, {
     boxSizing: "border-box",
     backgroundColor: "rgb(93, 93, 255, 0.04)",
     color: "#000000",
-    ...(!open && {
-      overflowX: "hidden",
+    ...(open && {
+      width: drawerWidth,
       transition: theme.transitions.create("width", {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
+        duration: theme.transitions.duration.enteringScreen,
       }),
+    }),
+    ...(!open && {
+      overflowX: "hidden",
       width: theme.spacing(7),
       [theme.breakpoints.up("sm")]: {
         width: theme.spacing(9),
@@ -126,7 +128,7 @@ export default function Dashboard() {
   };
 
   const handleScroll = () => {
-    setScrolled(window.scrollY > 50); // Adjust the scroll position value as needed
+    setScrolled(window.scrollY > 50);
   };
 
   useEffect(() => {
@@ -142,7 +144,7 @@ export default function Dashboard() {
     "/dashboard": "Dashboard",
     "/employeedetails": "Employee Details",
     "/studentdetails": "Student Details",
-    "/financialmanagement": "Financial Management",
+    // "/financialmanagement": "Financial Management",
     "/teacherdashboard": "Teacher Dashboard",
     "/assigncourse": "Assign Courses",
     "/attendance": "Attendance",
@@ -173,7 +175,7 @@ export default function Dashboard() {
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="fixed" scrolled={scrolled} sx={{ background: "tranaprent" }}>
+        <AppBar position="fixed" scrolled={scrolled}  sx={{ background: "#5d5dff" }}>
           <Toolbar>
             <IconButton
               color="inherit"
@@ -193,9 +195,6 @@ export default function Dashboard() {
                   <AccountCircleIcon />
                 </IconButton>
               </Tooltip>
-              <IconButton color="inherit">
-                <SettingsIcon />
-              </IconButton>
               <IconButton color="inherit">
                 <NotificationsIcon />
               </IconButton>
@@ -254,31 +253,10 @@ export default function Dashboard() {
                     </ListItemIcon>
                     <ListItemText primary="Student Details" />
                   </ListItem>
-                  <ListItem button sx={listStyles.listItem}>
-                    <ListItemIcon sx={listStyles.listItemIcon}>
-                      <span className="material-symbols-rounded">
-                        bar_chart
-                      </span>
-                    </ListItemIcon>
-                    <ListItemText primary="Financial Management" />
-                  </ListItem>
                   <Divider />
                   <ListSubheader inset sx={listStyles.subheader}>
                     Teacher
                   </ListSubheader>
-                  <ListItem
-                    button
-                    component={Link}
-                    to="/teacherdashboard"
-                    sx={listStyles.listItem}
-                  >
-                    <ListItemIcon sx={listStyles.listItemIcon}>
-                      <span className="material-symbols-rounded">
-                        dashboard
-                      </span>
-                    </ListItemIcon>
-                    <ListItemText primary="Dashboard" />
-                  </ListItem>
                   <ListItem
                     button
                     component={Link}
@@ -293,19 +271,6 @@ export default function Dashboard() {
                   <ListItem
                     button
                     component={Link}
-                    to="/attendance"
-                    sx={listStyles.listItem}
-                  >
-                    <ListItemIcon sx={listStyles.listItemIcon}>
-                      <span className="material-symbols-rounded">
-                        co_present
-                      </span>
-                    </ListItemIcon>
-                    <ListItemText primary="Attendance" />
-                  </ListItem>
-                  <ListItem
-                    button
-                    component={Link}
                     to="/eventcalander"
                     sx={listStyles.listItem}
                   >
@@ -316,72 +281,19 @@ export default function Dashboard() {
                     </ListItemIcon>
                     <ListItemText primary="Calendar" />
                   </ListItem>
-                  <ListItem button sx={listStyles.listItem}>
+                  <ListItem button   component={Link}
+                    to="/addnewcourse" sx={listStyles.listItem}>
                     <ListItemIcon sx={listStyles.listItemIcon}>
                       <span className="material-symbols-rounded">grading</span>
                     </ListItemIcon>
-                    <ListItemText primary="Grade Profile" />
+                    <ListItemText primary="Add New Course" />
                   </ListItem>
                   <Divider />
-                  <ListSubheader inset sx={listStyles.subheader}>
-                    Student
-                  </ListSubheader>
-                  <>
-                  <ListItem
-                    button
-                    component={Link}
-                    to="/attedancestudent"
-                    sx={listStyles.listItem}
-                  >
-                    <ListItemIcon sx={listStyles.listItemIcon}>
-                      <span className="material-symbols-rounded">
-                        co_present
-                      </span>
-                    </ListItemIcon>
-                    <ListItemText primary="Attendance" />
-                  </ListItem>
-                  <ListItem button component={Link}
-                    to="/studentcourse" sx={listStyles.listItem}>
-                    <ListItemIcon sx={listStyles.listItemIcon}>
-                      <span className="material-symbols-rounded">book</span>
-                    </ListItemIcon>
-                    <ListItemText primary="Course Details" />
-                  </ListItem>
-                  <ListItem button component={Link}
-                    to="/LeaveRequest" sx={listStyles.listItem}>
-                    <ListItemIcon sx={listStyles.listItemIcon}>
-                      <span className="material-symbols-rounded">book</span>
-                    </ListItemIcon>
-                    <ListItemText primary="LeaveRequest" />
-                  </ListItem>
-                  <ListItem
-                    button
-                    component={Link}
-                    to="/eventcalander"
-                    sx={listStyles.listItem}
-                  >
-                    <ListItemIcon sx={listStyles.listItemIcon}>
-                      <span className="material-symbols-rounded">
-                        calendar_today
-                      </span>
-                    </ListItemIcon>
-                    <ListItemText primary="Calendar" />
-                  </ListItem>
-                  <ListItem button    component={Link}
-                    to="/studentdetailsform"sx={listStyles.listItem}>
-                    <ListItemIcon sx={listStyles.listItemIcon}>
-                      <span className="material-symbols-rounded">school</span>
-                    </ListItemIcon>
-                    <ListItemText primary="Profile" />
-                  </ListItem>
-                  <Divider />
-                </>
                   <Divider />
                 </>
               )}
               {userRole === 2 && (
                 <>
-                  
                     <ListItem
                       button
                       component={Link}

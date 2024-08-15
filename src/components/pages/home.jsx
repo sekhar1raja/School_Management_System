@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../pages/style.css";
+import "../pages/responsive.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -80,8 +81,7 @@ function App() {
                 <div className="col-12 col-xl-8 mb-4 mb-xl-0 text-start">
                   <h3 className="font-weight-bold">Welcome {userName}</h3>
                   <h6 className="font-weight-normal mb-0">
-                    All systems are running smoothly! You have{" "}
-                    <span className="text-primary">3 unread alerts!</span>
+                    All systems are running smoothly! 
                   </h6>
                 </div>
                 <div className="col-12 col-xl-4">
@@ -139,7 +139,8 @@ function App() {
                           icon={faGraduationCap}
                           className="me-2"
                         />
-                        Add Students
+                        <Link to='/studentdetails'className="text-white "style={{ textDecoration: 'none' }}> Students Details</Link>
+                       
                       </p>
                     </div>
                   </div>
@@ -147,10 +148,12 @@ function App() {
                 <div className="col-md-6 mb-4 stretch-card transparent">
                   <div className="card card-dark-blue">
                     <div className="card-body">
-                      <p className="mb-4">
+                      <p className="mb-4 ">
                         {" "}
                         <FontAwesomeIcon icon={faUserTie} className="me-2" />
-                        Add Teachers
+                        <Link to ="/EmployeeDetails" className="text-white "style={{ textDecoration: 'none' }}>Teachers Details
+                        </Link>
+                      
                       </p>
                     </div>
                   </div>
@@ -161,9 +164,10 @@ function App() {
                   <div className="card card-light-blue">
                     <div className="card-body">
                       <p className="mb-4">
-                        {" "}
+                      <Link to="/addnewcourse" className="text-white "style={{ textDecoration: 'none' }}> 
                         <FontAwesomeIcon icon={faGift} className="me-2" />
-                        Add Event
+                        Add New Course
+                        </Link>
                       </p>
                     </div>
                   </div>
@@ -172,8 +176,8 @@ function App() {
                   <div className="card card-light-danger">
                     <div className="card-body">
                       <p className="mb-4">
-                      <Link to="/annocements">               
-                        <FontAwesomeIcon icon={faCalendar} className="me-2" />
+                      <Link to="/annocements" className="text-white "style={{ textDecoration: 'none' }}>               
+                        <FontAwesomeIcon icon={faCalendar} className="me-2"/>
                         Add Announcements
                         </Link>
                       </p>
@@ -185,11 +189,11 @@ function App() {
           </div>
         </div>
         <div className="row container-flex mt-3">
-            <div className="card flex-item-1 ">
+            <div className="card flex-item-1 calander">
                 <Eventcalander />
             </div>
-            <div className="card flex-item-2 ">
-              <div className="card-body">
+            <div className="card flex-item-2 pie-chart">
+              <div className="card-body" >
                 <h4 className="card-title">Teachers, Students, and Holidays Count</h4>
                 <DoughnutChart teachers={totalTeachers} employees={totalStudents} holidays={totalHolidays} />
               </div>

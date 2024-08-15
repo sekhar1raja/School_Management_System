@@ -6,7 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import { Edit, Delete } from '@mui/icons-material';
 import Tooltip from '@mui/material/Tooltip';
-import axios from 'axios';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -14,8 +13,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 const columns = (handleDelete) => [
     { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'firstName', headerName: 'First name', width: 130 },
-    { field: 'lastName', headerName: 'Last name', width: 130 },
+    { field: 'firstName', headerName: 'First Name', width: 130 },
+    { field: 'lastName', headerName: 'Last Name', width: 130 },
     { field: 'section', headerName: 'Section', flex: 1 },
     { field: 'email', headerName: 'Email', width: 200 },
     { field: 'phoneNumber', headerName: 'Phone Number', type: 'number', width: 130 },
@@ -28,7 +27,7 @@ const columns = (handleDelete) => [
         renderCell: (params) => (
             <div>
                 <Tooltip title="Edit Employee">
-                <Link to={`/updatestudent/${params.row.id}`}>
+                    <Link to={`/updatestudent/${params.row.id}`}>
                         <Edit color="primary" />
                     </Link>
                 </Tooltip>
@@ -56,11 +55,11 @@ export default function StudentTable() {
     }, []);
 
     const fetchData = () => {
-        axios.get('http://localhost:8080/user/user?roleId=2')
-            .then(response => {
-                console.log('API Response:', response); // Debug: check response data
-                if (response.data && Array.isArray(response.data)) {
-                    const users = response.data.map(user => ({
+        fetch('http://localhost:8080/user/user?roleId=2')
+            .then(response => response.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    const users = data.map(user => ({
                         id: user.userid || 'N/A',
                         firstName: user.firstName || 'N/A',
                         lastName: user.lastName || 'N/A',
@@ -87,17 +86,32 @@ export default function StudentTable() {
     };
 
     const confirmDelete = () => {
-        axios.delete(`http://localhost:8080/user/user/${currentId}`)
-            .then(() => {
-                setRows(rows.filter(row => row.id !== currentId));
-                setOpenDialog(false);
-            })
-            .catch(err => {
-                console.error('Error deleting user:', err);
-                setError(`Error deleting user: ${err.message}`);
-                setOpenDialog(false);
-            });
+        fetch(`http://localhost:8080/user/user/${currentId}`, {
+            method: 'DELETE',
+            origin: '*',
+
+            allowedHeaders: [
+              'Content-Type', 'application/json',
+            ],
+          
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // or response.text() if the server returns text
+        })
+        .then(() => {
+            setRows(rows.filter(row => row.id !== currentId));
+            setOpenDialog(false);
+        })
+        .catch(err => {
+            console.error('Error deleting user:', err);
+            setError(`Error deleting user: ${err.message}`);
+            setOpenDialog(false);
+        });
     };
+
     const handleSearch = () => {
         const filteredRows = rows.filter(row =>
             Object.values(row).some(value =>
@@ -109,6 +123,7 @@ export default function StudentTable() {
 
     return (
         <div className="container" style={{ height: 500, width: '100%' }}>
+            {error && <div className="alert alert-danger">{error}</div>}
             <div className="row mb-3">
                 <div className="col-9">
                     <TextField
@@ -136,7 +151,7 @@ export default function StudentTable() {
                 pageSize={5}
                 checkboxSelection
             />
-              <Dialog
+            <Dialog
                 open={openDialog}
                 onClose={() => setOpenDialog(false)}
             >

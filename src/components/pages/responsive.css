@@ -1,0 +1,23 @@
+@media (min-width: 697px) and (max-width: 768px) {
+    .col-md-6 {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+    }
+    .tale-bg{
+        background-position-y: 10px;
+    }
+    .calander{
+        flex: 0 0 auto !important;
+        width: 100% !important;
+    }
+  
+}
+@media  (min-width: 320px) and (max-width: 691px) {
+    .calander{
+        flex: 0 0 auto !important;
+        width: 100% !important;
+    }
+    .flex-item-1{
+        flex: 0 0 auto !important;
+    }
+  }

@@ -3,7 +3,11 @@ import { Button, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Paper
 import Dropdown from 'react-dropdown';
 import { useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import 'react-dropdown/style.css';  // Import styles for the dropdown
+import 'react-dropdown/style.css';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 import logo from './logo1.png';
 
 const defaultTheme = createTheme();
@@ -14,6 +18,7 @@ export default function SignInSide() {
   const [passwordError, setPasswordError] = useState('');
   const [roleError, setRoleError] = useState('');
   const [message, setMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSelect = (option) => {
@@ -21,13 +26,15 @@ export default function SignInSide() {
     setRoleError(''); // Clear role error when a role is selected
   };
 
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   const options = [
     { value: 1, label: 'admin' },
     { value: 2, label: 'student' },
     { value: 3, label: 'professor' },
   ];
-
-  const defaultOption = options[0];
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -39,34 +46,39 @@ export default function SignInSide() {
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
-
+  
     let isValid = true;
-
+    let errorMessage = '';
+  
     if (!validateEmail(email)) {
       setEmailError('Invalid email address');
+      errorMessage += 'Invalid email address. ';
       isValid = false;
     } else {
       setEmailError('');
     }
-
+  
     if (!password) {
       setPasswordError('Password is required');
+      errorMessage += 'Password is required. ';
       isValid = false;
     } else {
       setPasswordError('');
     }
-
+  
     if (!role) {
       setRoleError('Role is required');
+      errorMessage += 'Role is required. ';
       isValid = false;
     } else {
       setRoleError('');
     }
-
+  
     if (!isValid) {
+      setMessage(`Login failed: ${errorMessage} Please enter valid credentials.`);
       return;
     }
-
+  
     const userData = {
       email,
       password,
@@ -74,7 +86,7 @@ export default function SignInSide() {
         id: role,
       },
     };
-
+  
     try {
       const response = await fetch('http://localhost:8080/user/userLogin', {
         method: 'POST',
@@ -83,22 +95,25 @@ export default function SignInSide() {
         },
         body: JSON.stringify(userData),
       });
-
+  
+      console.log('Status Code:', response.status, 'Status Text:', response.statusText);  // Log status code and text
+      const result = await response.json();
+      console.log('Response JSON:', result);  // Log the entire response JSON
+  
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.statusText}`);
       }
-
-      const result = await response.json();
-      console.log(result.roles);
-
-      // Store user role in local storage
+  
+      if (!result.roles || !result.roles.id) {
+        throw new Error('Role ID is missing from the response.');
+      }
+  
       localStorage.setItem('userRole', result.roles.id);
       localStorage.setItem('userId', result.userid);
       localStorage.setItem('firstName', result.firstName);
-      console.log(localStorage);
-      console.log(result);
-
-      // Navigate to different pages based on the role
+      localStorage.setItem('CourseId', result.coursesOffered?.courseOfferedId || '');
+      localStorage.setItem('semester', result.currentSemester);
+  
       switch (result.roles.id) {
         case 1:
           navigate('/Dashboard');
@@ -110,17 +125,14 @@ export default function SignInSide() {
           navigate('/studentannouncements');
           break;
         default:
-          navigate('/dashboard'); // Default to dashboard if role is not recognized
+          navigate('/dashboard');
       }
-
-      console.log(result);
-      localStorage.setItem('CourseId', result.coursesOffered.courseOfferedId);
-      localStorage.setItem('semester', result.currentSemester);
     } catch (error) {
       console.error('There was a problem with your fetch operation:', error);
-      setMessage('Login failed');
+      setMessage('Login failed: Please check your credentials and try again.');
     }
   };
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -173,11 +185,20 @@ export default function SignInSide() {
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 autoComplete="current-password"
                 error={!!passwordError}
                 helperText={passwordError}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleTogglePasswordVisibility}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
               <Dropdown
                 options={options}

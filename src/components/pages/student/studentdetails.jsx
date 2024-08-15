@@ -105,7 +105,7 @@ function StudentProfile() {
       <div className="row justify-content-center">
         <div className="col-lg-12">
           <div className="card shadow-lg p-3 mb-5 bg-white rounded">
-            <div className="card-header text-center text-white" style={{ background: '#F7871B' }}>
+            <div className="card-header text-center text-white" style={{ background: '#5d5dff' }}>
               <h2>Student Profile</h2>
             </div>
             <div className="card-body">
@@ -115,7 +115,7 @@ function StudentProfile() {
                     <div className="mb-4">
                       <div className="d-flex justify-content-around align-items-center">
                         <h4 style={{ color: '#525F7F', fontWeight: 'bolder' }}>Personal Information</h4>
-                        <button type="submit" className="btn btn-success m-3">Update Profile</button>
+                       
                       </div>
                       <div className="mb-3">
                         <label htmlFor="firstName" className="form-label d-flex" style={{ color: '#525F7F', fontWeight: 'bold' }}>First Name</label>
@@ -254,6 +254,7 @@ function StudentProfile() {
                           Please provide a semester.
                         </div>
                       </div>
+                      <button type="submit" className="btn btn-success m-3">Update Profile</button>
                     </div>
                   </form>
                 </div>

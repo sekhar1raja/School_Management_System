@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function RegistrationPages() {
   const { userId } = useParams(); // Get the user ID from the URL parameters
@@ -22,12 +24,11 @@ function RegistrationPages() {
     postal_code: "",
     country: "",
     section: { sectionId: "" },
-    
     coursesOffered: {
         courseOfferedId: ""
     },
     fees: "",
-    semester:"",
+    semester: "",
   });
 
   const [sections, setSections] = useState([]);
@@ -45,12 +46,12 @@ function RegistrationPages() {
           setFormData(data);
         } catch (error) {
           console.error("Failed to fetch user data:", error);
+          toast.error("Failed to fetch user data.");
         }
       };
       fetchUserData();
     }
   }, [userId]);
-  
 
   useEffect(() => {
     const fetchSection = async () => {
@@ -63,6 +64,7 @@ function RegistrationPages() {
         setSections(data);
       } catch (error) {
         console.error("Failed to fetch section:", error);
+        toast.error("Failed to fetch sections.");
       }
     };
     fetchSection();
@@ -79,6 +81,7 @@ function RegistrationPages() {
         setCourses(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Failed to fetch courses:", error);
+        toast.error("Failed to fetch courses.");
       }
     };
     fetchCourses();
@@ -100,47 +103,45 @@ function RegistrationPages() {
       setFormData({ ...formData, [name]: value });
     }
   };
-  
 
- const handleSubmit = async (event) => {
-  event.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  // Assuming formData is populated correctly
+    const url = `http://localhost:8080/user/user`;
 
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        mode: 'cors',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-  const url = `http://localhost:8080/user/user`;
+      if (!response.ok) {
+        throw new Error("Network response was not ok.");
+      }
 
-  try {
-    const response = await fetch(url, {
-      method: "PUT",
-      mode: 'cors',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok.");
+      const data = await response.json();
+      console.log("Success:", data);
+      toast.success("User updated successfully.");
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error updating user.");
     }
-
-    const data = await response.json();
-    console.log("Success:", data);
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
-
+  };
 
   return (
     
     <div className="container mt-5">
+      <ToastContainer />
       <div className="row justify-content-center">
         <div className="col-lg-12">
           <div className="card shadow-lg p-3 mb-5 bg-white rounded">
             <div className="mb-4">
               <h4 style={{ color: "#525F7F" }}>Update The Information</h4>
-              <p>ID: {userId}</p>
+              {/* <p>ID: {userId}</p> */}
             </div>
 
             <div className="">
@@ -257,8 +258,8 @@ function RegistrationPages() {
                         onChange={handleChange}
                       >
                         <option value="">Select Role</option>
-                        <option value="3">Teacher</option>
-                        <option value="2">Student</option>
+                        <option value="2">Teacher</option>
+                        <option value="3">Student</option>
                       </select>
                         <div className="invalid-feedback">
                           Please select a role.
@@ -643,8 +644,8 @@ function RegistrationPages() {
                       </div>
                     </div>
 
-                    <button type="submit" className="btn btn-primary">
-                      Submit
+                    <button type="submit" className="btn btn-primary col-lg-4">
+                      Update Profile
                     </button>
                   </form>
                 </div>

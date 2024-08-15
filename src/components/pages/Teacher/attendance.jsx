@@ -1,6 +1,27 @@
-import { Description } from '@mui/icons-material';
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Form, Table, Button } from 'react-bootstrap';
+import {
+  Container,
+  Grid,
+  Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from '@mui/material';
 
 const AttendancePage = () => {
   const [courses, setCourses] = useState([]);
@@ -9,7 +30,7 @@ const AttendancePage = () => {
   const [courseSubjects, setCourseSubjects] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedSection, setSelectedSection] = useState('');
-  const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().slice(0, 16)); // Include time in YYYY-MM-DDTHH:MM format
+  const [attendanceDate, setAttendanceDate] = useState(new Date().toISOString().slice(0, 16));
   const [attendanceData, setAttendanceData] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState('');
 
@@ -31,10 +52,9 @@ const AttendancePage = () => {
   }, [selectedCourse, selectedSection]);
 
   useEffect(() => {
-    // Initialize attendanceData based on students
     const initialAttendanceData = students.map(student => ({
       student_id: student.userid,
-      is_present: 2 // Default to absent
+      is_present: 2
     }));
     setAttendanceData(initialAttendanceData);
   }, [students]);
@@ -77,7 +97,7 @@ const AttendancePage = () => {
       const courseId = parseInt(selectedCourse, 10);
       const sectionId = parseInt(selectedSection, 10);
   
-      const filteredStudents = data.filter(user => 
+      const filteredStudents = data.filter(user =>
         user.coursesOffered.courseOfferedId === courseId &&
         user.section.sectionId === sectionId
       );
@@ -130,90 +150,130 @@ const AttendancePage = () => {
       alert('Failed to submit attendance');
     }
   };
-  
-  
-
-  
 
   return (
-    <Container>
-      <h1 className="my-4">Attendance Page</h1>
-      <Row className="mb-4">
-        <Col md={4}>
-          <Form.Group controlId="courseSelect">
-            <Form.Label>Course</Form.Label>
-            <Form.Control as="select" onChange={(e) => setSelectedCourse(e.target.value)} value={selectedCourse}>
-              <option value="">Select Course</option>
-              {courses.map(course => (
-                <option key={course.courseOfferedId} value={course.courseOfferedId}>{course.courseName}</option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-        </Col>
-        <Col md={4}>
-          <Form.Group controlId="courseSubject">
-            <Form.Label>Subject</Form.Label>
-            <Form.Control as="select" onChange={(e) => setSelectedSubject(e.target.value)} value={selectedSubject}>
-              <option value="">Select Subject</option>
-              {courseSubjects.map(subject => (
-                <option key={subject.courseSubjectId} value={subject.courseSubjectId}>{subject.subjectName}</option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-        </Col>
-        <Col md={4}>
-          <Form.Group controlId="sectionSelect">
-            <Form.Label>Section</Form.Label>
-            <Form.Control as="select" onChange={(e) => setSelectedSection(e.target.value)} value={selectedSection}>
-              <option value="">Select Section</option>
-              {sections.map(section => (
-                <option key={section.sectionId} value={section.sectionId}>{section.section}</option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-        </Col>
-        <Col md={4}>
-          <Form.Group controlId="attendanceDate">
-            <Form.Label>Date</Form.Label>
-            <Form.Control 
-              type="datetime-local" 
-              value={attendanceDate} 
-              onChange={(e) => setAttendanceDate(e.target.value)}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-      <div className="mb-4">
-        <h2>Students</h2>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>Student Name</th>
-              <th>Present</th>
-            </tr>
-          </thead>
-          <tbody>
-            {students.map(student => (
-              <tr key={student.userid}>
-                <td>{`${student.firstName} ${student.lastName}`}</td>
-                <td>
-                  <Form.Check
-                    type="checkbox"
-                    checked={attendanceData.find(att => att.student_id === student.userid)?.is_present === 1}
-                    onChange={(e) => {
-                      const isPresent = e.target.checked ? 1 : 2; // 1 for present, 2 for absent
-                      setAttendanceData(prev =>
-                        prev.map(att => att.student_id === student.userid ? { ...att, is_present: isPresent } : att)
-                      );
-                    }}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </div>
-      <Button variant="primary" onClick={handleAttendanceSubmit}>Submit Attendance</Button>
+    <Container maxWidth="lg">
+      <Typography variant="h4" gutterBottom>
+        Attendance Page
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={4}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6">Filters</Typography>
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="course-label">Course</InputLabel>
+                <Select
+                  labelId="course-label"
+                  value={selectedCourse}
+                  onChange={(e) => setSelectedCourse(e.target.value)}
+                >
+                  <MenuItem value="">
+                    <em>Select Course</em>
+                  </MenuItem>
+                  {courses.map(course => (
+                    <MenuItem key={course.courseOfferedId} value={course.courseOfferedId}>
+                      {course.courseName}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="subject-label">Subject</InputLabel>
+                <Select
+                  labelId="subject-label"
+                  value={selectedSubject}
+                  onChange={(e) => setSelectedSubject(e.target.value)}
+                >
+                  <MenuItem value="">
+                    <em>Select Subject</em>
+                  </MenuItem>
+                  {courseSubjects.map(subject => (
+                    <MenuItem key={subject.courseSubjectId} value={subject.courseSubjectId}>
+                      {subject.subjectName}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="section-label">Section</InputLabel>
+                <Select
+                  labelId="section-label"
+                  value={selectedSection}
+                  onChange={(e) => setSelectedSection(e.target.value)}
+                >
+                  <MenuItem value="">
+                    <em>Select Section</em>
+                  </MenuItem>
+                  {sections.map(section => (
+                    <MenuItem key={section.sectionId} value={section.sectionId}>
+                      {section.section}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <TextField
+                fullWidth
+                margin="normal"
+                label="Date"
+                type="datetime-local"
+                value={attendanceDate}
+                onChange={(e) => setAttendanceDate(e.target.value)}
+              />
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6" style={{color:'blue'}}>Students List</Typography>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Student Name</TableCell>
+                      <TableCell>Present</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {students.map(student => (
+                      <TableRow key={student.userid}>
+                        <TableCell>{`${student.firstName} ${student.lastName}`}</TableCell>
+                        <TableCell>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={attendanceData.find(att => att.student_id === student.userid)?.is_present === 1}
+                                onChange={(e) => {
+                                  const isPresent = e.target.checked ? 1 : 2;
+                                  setAttendanceData(prev =>
+                                    prev.map(att => att.student_id === student.userid ? { ...att, is_present: isPresent } : att)
+                                  );
+                                }}
+                              />
+                            }
+                            label="Present"
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
+            <CardActions className='text-start col-lg-3'>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                onClick={handleAttendanceSubmit}
+              >
+                Submit Attendance
+              </Button>
+            </CardActions>
+          </Card>
+        </Grid>
+      </Grid>
     </Container>
   );
 };

@@ -1,49 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Typography, FormControl, InputLabel, Select, MenuItem, Button, Box, FormHelperText, Card, CardContent, Grid, Divider } from '@mui/material';
+import {
+  Container,
+  Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  Box,
+  FormHelperText,
+  Card,
+  CardContent,
+  Grid,
+  Divider
+} from '@mui/material';
 import ReactQuill from 'react-quill'; // Import react-quill for rich text editor
 import 'react-quill/dist/quill.snow.css'; // Import quill's styles
+import { ToastContainer, toast } from 'react-toastify'; // Import toastify
+import 'react-toastify/dist/ReactToastify.css'; // Import toastify styles
 
 const Announcements = () => {
   const [courses, setCourses] = useState([]);
   const [sections, setSections] = useState([]);
-  // const [courseOffered, setCourseOffered] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedSection, setSelectedSection] = useState('');
-  // const [selectedCourseOffered, setSelectedCourseOffered] = useState('');
-  const [note, setnote] = useState('');
+  const [note, setNote] = useState('');
 
   // Fetch courses and sections on component mount
   useEffect(() => {
-    fetch('http://localhost:8080/util/course')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched Courses:', data); // Debug log
-        setCourses(Array.isArray(data) ? data : []);
+    axios.get('http://localhost:8080/util/course')
+      .then(response => {
+        console.log('Fetched Courses:', response.data); // Debug log
+        setCourses(response.data);
       })
       .catch(error => console.error('Error fetching courses:', error));
 
-    fetch('http://localhost:8080/util/section')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched Sections:', data); // Debug log
-        setSections(Array.isArray(data) ? data : []);
+    axios.get('http://localhost:8080/util/section')
+      .then(response => {
+        console.log('Fetched Sections:', response.data); // Debug log
+        setSections(response.data);
       })
       .catch(error => console.error('Error fetching sections:', error));
   }, []);
-
-  // Fetch course offered when a course is selected
-  // useEffect(() => {
-  //   if (selectedCourse) {
-  //     fetch(`http://localhost:8080/util/subjectByCourseId?courseId=${selectedCourse}`)
-  //       .then(response => response.json())
-  //       .then(data => {
-  //         console.log('Fetched Course Offered:', data); // Debug log
-  //         setCourseOffered(Array.isArray(data) ? data : []);
-  //       })
-  //       .catch(error => console.error('Error fetching course offered:', error));
-  //   }
-  // }, [selectedCourse]);
 
   // Handle form submission
   const handleSubmit = (e) => {
@@ -71,25 +70,29 @@ const Announcements = () => {
     // Send form data to the server
     axios.post('http://localhost:8080/util/announcement', formData)
       .then(response => {
-        alert('Announcement added successfully!');
-        setnote('');
+        toast.success('Announcement added successfully!');
+        setNote('');
         setSelectedCourse('');
         setSelectedSection('');
-        // setSelectedCourseOffered('');
       })
-      .catch(error => console.error('Error posting announcement:', error));
+      .catch(error => {
+        console.error('Error posting announcement:', error);
+        toast.error('Error posting announcement. Please try again.');
+      });
   };
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>Add Announcements</Typography>
+    <Container maxWidth="md" sx={{ mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Add Announcements
+      </Typography>
 
-      <Card>
+      <Card variant="outlined" sx={{ mb: 3 }}>
         <CardContent>
-          <Box border={1} borderRadius={4} padding={3}>
+          <Box border={1} borderRadius={2} padding={3} sx={{ boxShadow: 3 }}>
             <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={6} md={4}>
                   <FormControl fullWidth margin="normal">
                     <InputLabel id="course-label">Select Course</InputLabel>
                     <Select
@@ -102,7 +105,7 @@ const Announcements = () => {
                         <em>Select Course</em>
                       </MenuItem>
                       {courses.map(course => (
-                        <MenuItem key={course.Id} value={course.courseOfferedId}>
+                        <MenuItem key={course.courseOfferedId} value={course.courseOfferedId}>
                           {course.courseName}
                         </MenuItem>
                       ))}
@@ -111,29 +114,7 @@ const Announcements = () => {
                   </FormControl>
                 </Grid>
 
-                {/* <Grid item xs={12} sm={4}>
-                  <FormControl fullWidth margin="normal">
-                    <InputLabel id="program-label">Select Program</InputLabel>
-                    <Select
-                      labelId="program-label"
-                      value={selectedCourseOffered}
-                      onChange={(e) => setSelectedCourseOffered(e.target.value)}
-                      size="small"
-                    >
-                      <MenuItem value="">
-                        <em>Select Program</em>
-                      </MenuItem>
-                      {courseOffered.map(courseSubject => (
-                        <MenuItem key={courseSubject.id} value={courseSubject.courseSubjectId}>
-                          {courseSubject.subjectName}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>Select a program</FormHelperText>
-                  </FormControl>
-                </Grid> */}
-
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={6} md={4}>
                   <FormControl fullWidth margin="normal">
                     <InputLabel id="section-label">Select Section</InputLabel>
                     <Select
@@ -146,7 +127,7 @@ const Announcements = () => {
                         <em>Select Section</em>
                       </MenuItem>
                       {sections.map(section => (
-                        <MenuItem key={section.id} value={section.sectionId}>
+                        <MenuItem key={section.sectionId} value={section.sectionId}>
                           {section.section}
                         </MenuItem>
                       ))}
@@ -159,15 +140,16 @@ const Announcements = () => {
                   <Typography variant="h6" gutterBottom>Comments</Typography>
                   <ReactQuill
                     value={note}
-                    onChange={(value) => setnote(value)}
+                    onChange={(value) => setNote(value)}
                     theme="snow"
                     modules={{ toolbar: true }}
                     placeholder="Enter comments here..."
+                    style={{ height: '200px' }}
                   />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <Divider style={{ margin: '20px 0' }} />
+                  <Divider sx={{ my: 2 }} />
                   <Box display="flex" justifyContent="center" alignItems="center">
                     <Button variant="contained" color="primary" type="submit">
                       Submit
@@ -179,6 +161,9 @@ const Announcements = () => {
           </Box>
         </CardContent>
       </Card>
+
+      {/* Toast Container */}
+      <ToastContainer />
     </Container>
   );
 };

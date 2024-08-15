@@ -98,14 +98,17 @@ export default function StudentTable() {
 
     const confirmDelete = () => {
         axios.delete(`http://localhost:8080/user/user/${currentId}`)
-            .then(() => {
-                setRows(rows.filter(row => row.id !== currentId));
-                setOpenDialog(false);
-            })
-            .catch(err => {
-                setError(`Error deleting user: ${err.message}`);
-                setOpenDialog(false);
-            });
+        .then((response) => {
+            console.log("Delete response:", response);
+            setRows(rows.filter(row => row.id !== currentId));
+            setOpenDialog(false);
+        })
+        .catch(err => {
+            console.error("Error deleting user:", err);
+            setError(`Error deleting user: ${err.message}`);
+            setOpenDialog(false);
+        });
+    
     };
 
     const handleSearch = () => {

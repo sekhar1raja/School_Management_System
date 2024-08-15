@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, Typography, Box, Grid } from '@mui/material';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
+import { Card, CardContent, Typography, Box, Tabs, Tab, Grid } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../style.css'; // Ensure this file exists
 
@@ -23,21 +22,21 @@ const TabPanel = ({ children, value, index, ...other }) => (
   >
     {value === index && (
       <Box sx={{ p: 3 }}>
-        <Typography>{children}</Typography>
+        {children}
       </Box>
     )}
   </div>
 );
 
 function CourseDetails() {
-  const [value, setValue] = useState(0);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [value, setValue] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const professorId = localStorage.getItem('userId');
-    console.log('Professor ID:', professorId);
 
     if (professorId) {
       const fetchCourseDetails = async () => {
@@ -47,8 +46,6 @@ function CourseDetails() {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
           const responseData = await response.json();
-          console.log('API Response:', responseData);
-
           if (responseData && responseData.length > 0) {
             setCourses(responseData);
           } else {
@@ -69,6 +66,14 @@ function CourseDetails() {
     }
   }, []);
 
+  const handleCardClick = (courseSubjectId, sectionId) => {
+    if (courseSubjectId && sectionId) {
+      navigate(`/getAssignmentBySubjectSection?subjectId=${courseSubjectId}&sectionId=${sectionId}`);
+    } else {
+      console.error("Missing courseSubjectId or sectionId");
+    }
+  };
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -78,15 +83,14 @@ function CourseDetails() {
 
   return (
     <div>
-      <Card>
+      <Card variant="outlined" sx={{ mb: 4, boxShadow: 2 }}>
         <CardContent>
           <img
             src="https://images.unsplash.com/photo-1550660473-aed955e2e2a8?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Course Overview"
-            className="img-fluid"
-            style={{ width: '100%', height: '150px', objectFit: 'cover', marginBottom: '20px' }}
+            style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px' }}
           />
-          <Typography variant="h3" gutterBottom>
+          <Typography variant="h4" gutterBottom mt={2} sx={{ fontWeight: 'bold' }}>
             Welcome to edusys,
           </Typography>
           <Typography variant="body1" gutterBottom>
@@ -95,37 +99,62 @@ function CourseDetails() {
         </CardContent>
       </Card>
 
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+        <Tabs value={value} onChange={handleChange} aria-label="course tabs">
           <Tab label="All Courses" />
         </Tabs>
       </Box>
 
       <TabPanel value={value} index={0}>
-        <div className="container">
-          <div className="row">
-            {courses.map((course) => {
-              const { courseSubjects, section } = course;
-              const courseOffered = courseSubjects?.courseOffered || {};
-              const imageUrl = courseImageMap[courseSubjects.subjectName] || "https://images.unsplash.com/photo-1453749024858-4bca89bd9edc?q=80&w=2020&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-              
-              return (
-                <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4" key={course.courseSubjects.courseSubjectId}>
-                  <div className="card course-card">
-                    <img className="card-img-top" src={imageUrl} alt={courseSubjects.subjectName} />
-                    <div className="card-body">
-                      <Typography variant="h6">{courseSubjects.subjectName || 'N/A'}</Typography>
-                      <Typography variant="body2">Section: {section?.section || 'N/A'}</Typography>
-                      <Typography variant="body2">Semester: {courseSubjects.semester || 'N/A'}</Typography>
-                      <Typography variant="body2">Course Name: {courseOffered.courseName || 'N/A'}</Typography>
-                      <Typography variant="body2">Course Description: {courseOffered.courseDescrption || 'N/A'}</Typography>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <Grid container spacing={3}>
+          {courses.map((course) => {
+            const { courseSubjects, section } = course;
+            const courseOffered = courseSubjects?.courseOffered || {};
+            const imageUrl = courseImageMap[courseSubjects.subjectName] || "https://images.unsplash.com/photo-1453749024858-4bca89bd9edc?q=80&w=2020&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
+            return (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={course.courseSubjects.courseSubjectId}>
+                <Card
+                  sx={{
+                    cursor: 'pointer',
+                    boxShadow: 3,
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    transition: 'transform 0.3s ease',
+                    '&:hover': {
+                      transform: 'scale(1.05)',
+                      boxShadow: 6,
+                    },
+                  }}
+                  onClick={() => handleCardClick(course.courseSubjects.courseSubjectId, section?.sectionId)}
+                >
+                  <img
+                    src={imageUrl}
+                    alt={courseSubjects.subjectName}
+                    style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '12px 12px 0 0' }}
+                  />
+                  <CardContent>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                      {courseSubjects.subjectName || 'N/A'}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Section: {section?.section || 'N/A'}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Semester: {courseSubjects.semester || 'N/A'}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Course Name: {courseOffered.courseName || 'N/A'}
+                    </Typography>
+                    {/* <Typography variant="body2" color="textSecondary">
+                      Course Description: {courseOffered.courseDescrption || 'N/A'}
+                    </Typography> */}
+                  </CardContent>
+                </Card>
+              </Grid>
+            );
+          })}
+        </Grid>
       </TabPanel>
     </div>
   );

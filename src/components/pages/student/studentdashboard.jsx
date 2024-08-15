@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './student.css'; // Import the CSS file
 
 function AnnouncementsPage() {
   const [userDetails, setUserDetails] = useState(null);
@@ -35,56 +36,47 @@ function AnnouncementsPage() {
   };
 
   return (
-    <main role="main" className="container bootdey.com">
-      {userDetails && (
-        <div className="d-flex align-items-center p-3 my-3 text-black-50 bg-blue rounded box-shadow">
-          <img
-            className="mr-3"
-            src="https://bootdey.com/img/Content/avatar/avatar1.png"
-            alt=""
-            width="48"
-            height="48"
-          />
-          <div className="lh-100">
-            <h6 className="mb-0 text-black lh-100">
-              {userDetails.firstName} {userDetails.lastName}
-            </h6>
-            <small>Announcements</small>
+    <main role="main" className="container d-flex justify-content-center mt-100 mb-100">
+      <div className="row">
+        <div className="col-md-12">
+          <div className="card">
+            <div className="card-body">
+              <h4 className="card-title">Recent Comments</h4>
+              <h6 className="card-subtitle">Latest Comments section by users</h6>
+            </div>
+            <div className="comment-widgets m-b-20">
+              {announcements.map((announcement) => (
+                <div key={announcement.announcementId} className="d-flex flex-row comment-row">
+                  <div className="p-2">
+                    <span className="round">
+                      <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="user" width="50" />
+                    </span>
+                  </div>
+                  <div className="comment-text w-100">
+                    <h5>{announcement.user.firstName} {announcement.user.lastName}</h5>
+                    <div className="comment-footer">
+                      <span className="date">{announcement.date}</span>
+                      <span className={`label ${announcement.status === 'Pending' ? 'label-info' : announcement.status === 'Approved' ? 'label-success' : 'label-danger'}`}>
+                        {announcement.status}
+                      </span>
+                      {/* <span className="action-icons">
+                        <a href="#" data-abc="true"><i className="fa fa-pencil"></i></a>
+                        <a href="#" data-abc="true"><i className={`fa fa-rotate-right ${announcement.status === 'Approved' ? 'text-success' : ''}`}></i></a>
+                        <a href="#" data-abc="true"><i className={`fa fa-heart ${announcement.status === 'Rejected' ? 'text-danger' : ''}`}></i></a>
+                      </span> */}
+                    </div>
+                    <p className="m-b-5 m-t-10">
+                      <strong>Course: {announcement.courseoffered.courseName}</strong> <br />
+                      <strong>Section: {announcement.section.section}</strong>
+                    </p>
+                    <h5 className="text-start">Announcement Details</h5>
+                    <div className="text-start" dangerouslySetInnerHTML={{ __html: announcement.note }} />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      )}
-
-      <div className="my-3 p-3 bg-white rounded box-shadow text-start">
-        <h6 className="border-bottom border-gray pb-2 mb-0">Recent Updates</h6>
-        {announcements.map((announcement) => (
-          <div key={announcement.announcementId} className="media text-muted pt-3">
-            <img
-              src="https://bootdey.com/img/Content/avatar/avatar7.png"
-              alt=""
-              className="mr-2 rounded"
-              width="32"
-              height="32"
-            />
-            <div className='d-flex flex-column text-start'>
-                <div>
-                    <p className="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                    <strong className="d-block text-gray-dark">
-                      {announcement.user.firstName} {announcement.user.lastName}
-                    </strong>
-                    </p>
-                </div>
-                <div>
-                  <p>
-                      <strong>Course:{announcement.courseoffered.courseName}</strong> <br/>
-                      <strong>Section:{announcement.section.section}</strong> 
-                  </p>
-                </div>
-            </div>
-            <h5 className='text-start'>Announcement deatils</h5>
-            <div dangerouslySetInnerHTML={{ __html: announcement.note }} />
-          </div>
-        ))}
-        
       </div>
     </main>
   );

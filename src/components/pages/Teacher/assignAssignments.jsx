@@ -7,6 +7,8 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./teastyle.css";
 
 const AssignAssignment = () => {
@@ -19,7 +21,6 @@ const AssignAssignment = () => {
   const [assignmentName, setAssignmentName] = useState('');
   const [assignmentDescription, setAssignmentDescription] = useState('');
   const [assignmentInstruction, setAssignmentInstruction] = useState('');
-  const [comments, setComments] = useState('');
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -42,7 +43,6 @@ const AssignAssignment = () => {
     formData.append('assignmentName', assignmentName);
     formData.append('description', assignmentDescription);
     formData.append('assignmentInstruction', assignmentInstruction);
-    formData.append('comments', comments);
     formData.append('professorId', professorId);
     
     if (deadline) {
@@ -69,25 +69,23 @@ const AssignAssignment = () => {
         },
       });
       
-      alert('Assignment assigned successfully!');
+      toast.success('Assignment assigned successfully!');
     } catch (error) {
       console.error('There was an error assigning the assignment!', error);
+      toast.error('Failed to assign the assignment.');
     } finally {
       setUploading(false);
       setSelectedCourse('');
       setSelectedSection('');
       setSelectedCourseOffered('');
+      setAssignmentName('');
       setAssignmentDescription('');
       setAssignmentInstruction('');
-      setComments('');
       setDeadline(null);
       setFile(null);
       setUploadProgress(0);
     }
   };
-  
-  
-  
 
   useEffect(() => {
     fetch('http://localhost:8080/util/course')
@@ -116,6 +114,7 @@ const AssignAssignment = () => {
         .catch(error => console.error('Error fetching course offered:', error));
     }
   }, [selectedCourse]);
+
   return (
     <Container>
       <img
@@ -123,9 +122,9 @@ const AssignAssignment = () => {
         alt="Assign Course"
         style={{ width: '100%', height: '150px', objectFit: 'cover', marginBottom: '20px' }}
       />
-      <Typography variant="h4" gutterBottom>Assign the Assignment</Typography>
+      <Typography variant="h4" gutterBottom style={{}}>Assign the Assignment</Typography>
 
-      <Card className="assignment-card">
+      <Card>
         <CardContent>
           <Box border={1} borderRadius={4} padding={3}>
             <form onSubmit={handleSubmit}>
@@ -232,61 +231,55 @@ const AssignAssignment = () => {
                     required
                   />
                 </Grid>
-                <Grid item xs={3}>
-        <DatePicker
-          selected={deadline}
-          onChange={(date) => setDeadline(date)}
-          dateFormat="MMMM d, yyyy time"
-          placeholderText="Select a date"
-          customInput={
-            <TextField
-              label="Deadline"
-              fullWidth
-              margin="normal"
-              InputProps={{ readOnly: true }}
-              variant="outlined"
-              size="small"
-            />
-          }
-          popperPlacement="bottom-end"
-        />
-      </Grid>
-                <Grid item xs={12}>
-                  <div>
-                    <input
-                      id="file"
-                      type="file"
-                      style={{ display: 'none' }}
-                      onChange={handleFileChange}
-                    />
-                    <label htmlFor="file">
-                      <IconButton color="primary" component="span">
-                        <CloudUploadIcon /> Upload File
-                      </IconButton>
-                    </label>
-                    {file && (
-                      <Typography variant="body2" color="textSecondary">
-                          <li>Type:  {file.name}</li>
-                        <li>Type: {file.type}</li>
-                      </Typography>
-                    )}
-                  </div>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Typography variant="h6" gutterBottom>Comments</Typography>
-                  <ReactQuill
-                    value={comments}
-                    onChange={(value) => setComments(value)}
-                    theme="snow"
-                    modules={{ toolbar: true }}
-                    placeholder="Enter comments here..."
+                <box item xs={12} sm={12} style={{marginleft:'10px'}}>
+                <Grid item xs={12} sm={12}>
+                  <DatePicker
+                    selected={deadline}
+                    onChange={(date) => setDeadline(date)}
+                    dateFormat="MMMM d, yyyy"
+                    placeholderText="Select a date"
+                    customInput={
+                      <TextField
+                        label="Deadline"
+                        fullWidth
+                        margin="normal"
+                        InputProps={{ readOnly: true }}
+                        variant="outlined"
+                        size="small"
+                      />
+                    }
+                    popperPlacement="bottom-end"
                   />
                 </Grid>
 
-                <Grid item xs={12}>
-                  <Divider style={{ margin: '20px 0' }} />
+                <Grid item xs={12} sm={12}>
+                  <input
+                    accept="*"
+                    type="file"
+                    id="file"
+                    style={{ display: 'none' }}
+                    onChange={handleFileChange}
+                  />
+                  <label htmlFor="file">
+                    <Button style={{textAlign:'start'
+                    }}
+                      variant="outlined"
+                      color="primary"
+                      component="span"
+                      startIcon={<CloudUploadIcon />}
+                    >
+                      Upload File
+                    </Button>
+                  </label>
+                  {file && (
+                      <Typography variant="body2" color="textSecondary">
+                          <li>Type:  {file.name}</li>
+                        
+                      </Typography>
+                    )}
                 </Grid>
+                </box>
+                
 
                 <Grid item xs={12}>
                   <FormControlLabel
@@ -295,30 +288,36 @@ const AssignAssignment = () => {
                         checked={isAssignmentOpen}
                         onChange={(e) => setIsAssignmentOpen(e.target.checked)}
                         name="isAssignmentOpen"
-                        color="primary"
                       />
                     }
-                    label="Is Assignment Open"
+                    label="Open for Submission"
                   />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <Box display="flex" justifyContent="center" alignItems="center">
-                    {uploading && (
-                      <Box width="100%" mr={2}>
-                        <LinearProgress variant="determinate" value={uploadProgress} />
-                      </Box>
-                    )}
-                    <Button variant="contained" color="primary" type="submit" disabled={uploading}>
-                      {uploading ? 'Uploading...' : 'Upload Assignment'}
-                    </Button>
-                  </Box>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    disabled={uploading}
+                    fullWidth
+                  >
+                    {uploading ? 'Submitting...' : 'Submit Assignment'}
+                  </Button>
                 </Grid>
+
+                {uploading && (
+                  <Grid item xs={12}>
+                    <LinearProgress variant="determinate" value={uploadProgress} />
+                  </Grid>
+                )}
               </Grid>
             </form>
           </Box>
         </CardContent>
       </Card>
+
+      <ToastContainer />
     </Container>
   );
 };

@@ -1,4 +1,4 @@
-/* App.css */
+App.css
 
 body{
   background-color: #F5F7FF !important;
@@ -30,6 +30,12 @@ body{
   margin-bottom: 20px;
 }
 
+@media (min-width: 768px) {
+  .col-md-6 {
+      flex: 0 0 auto;
+      width: 100%;
+  }
+}
 .font-weight-bold {
   font-weight: bold;
 }
@@ -341,3 +347,6 @@ body{
   height: 150px;
   object-fit: cover;
 }
+
+/* CSS for screens between 768px and 697px */
+
